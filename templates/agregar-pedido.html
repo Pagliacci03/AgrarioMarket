@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="utf-8">
+        <title>Agregar Pedido</title>
+        <link rel="stylesheet" href="../css/agregar-pedido.css">
+        <style id="operaUserStyle"></style>
+    </head>
+    <body>
+        <div class="container_pedido">
+            <div>
+                <p id="title">Agregar Pedido</p>
+            </div>
+            <form class="addOrder" id="addOrder_form">
+                <table id="addOrder_table">
+                    <tr class="input_grupo">
+                        <td>
+                            <label for="product_type">Tipo de Producto</label>
+                        </td>
+                        <td>
+                            <select name="productType" id="product_type" class="menu_selection">
+                                <option value="" disabled selected>Seleccione una opción</option>
+                                <option value="fruta">Fruta</option>
+                                <option value="verdura">Verdura (Hortaliza)</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr class="input_grupo">
+                        <td>
+                            <label>Producto</label>
+                        </td>
+                        <td id="products">
+                            <label>Seleccione un tipo de producto</label>
+                        </td>
+                    </tr>
+                    <tr class="input_grupo">
+                        <td>
+                            <label for="description">Descripción</label>
+                        </td>
+                        <td>
+                            <textarea rows="4" cols="50" id="description" class="input_text"></textarea>
+                        </td>
+                    </tr>
+                    <tr class="input_grupo">
+                        <td>
+                            <label for="region">Región</label>
+                        </td>
+                        <td>
+                            <select id="region" class="menu_selection">
+                                <option value="" disabled selected>Seleccione una opción</option>
+                                <option value="arica">Región de Arica y Parinacota</option>
+                                <option value="tarapaca">Región de Tarapacá</option>
+                                <option value="antofagasta">Región de Antofagasta</option>
+                                <option value="atacama">Región de Atacama</option>
+                                <option value="coquimbo">Región de Coquimbo</option>
+                                <option value="valparaiso">Región de Valparaíso</option>
+                                <option value="metropolitana">Región Metropolitana</option>
+                                <option value="ohiggins">Región del Libertador General Bernardo O'Higgins</option>
+                                <option value="maule">Región del Maule</option>
+                                <option value="nuble">Región de Ñuble</option>
+                                <option value="biobio">Región del Biobío</option>
+                                <option value="araucania">Región de La Araucanía</option>
+                                <option value="rios">Región de Los Ríos</option>
+                                <option value="lagos">Región de Los Lagos</option>
+                                <option value="aysen">Región de Aysén del General Carlos Ibáñez del Campo</option>
+                                <option value="magallanes">Región de Magallanes y de la Antártica Chilena</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr class="input_grupo">
+                        <td>
+                            <label for="comunas">Comuna</label>
+                        </td>
+                        <td>
+                            <select id="comunas" class="menu_selection">
+                                <option value="" disabled selected>Seleccione la región del pedido</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr class="input_grupo">
+                        <td>
+                            <label for="name">Nombre del comprador</label>
+                        </td>
+                        <td>
+                            <input id="name" name="name" type="text" size="80" class="input_text">
+                        </td>
+                    </tr>
+                    <tr class="input_grupo">
+                        <td>
+                            <label for="email">Email del comprador</label>
+                        </td>
+                        <td>
+                            <input id="email" name="email" type="email" size="30" class="input_text">
+                        </td>
+                    </tr>
+                    <tr class="input_grupo">
+                        <td>
+                            <label for="phone">Número celular del comprador</label>
+                        </td>
+                        <td>
+                            <b>+569 </b><input id="phone" name="phone" type="text" size="15" class="input_text">
+                        </td>
+                    </tr>
+                    <tr class="botones">
+                        <td colspan="2">
+                            <button type="button" id="index" class="button_pedido">Indice</button>
+                            <button type="button" id="add_order" class="button_pedido">Agregar Pedido</button>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+        <dialog id="modal_order" class="modal_order">
+            <div class="modal_content_order">
+              <p>¿Confirma el registro de este pedido?</p>
+              <button id="confirmar" class="modal_button">Sí, confirmo</button>
+              <button id="cancelar" class="modal_button">No, quiero volver al formulario</button>
+            </div>
+        </dialog>
+        <dialog id="modal_success" class="modal_order">
+            <div class="modal_content_order">
+              <p>Hemos recibido su pedido. Muchas gracias.</p>
+              <button id="aceptar" class="modal_button">Aceptar</button>
+            </div>
+        </dialog>
+        <script src="../js/backToIndex.js"></script>
+        <script src="../js/validaciones.js"></script>
+        <script src="../js/selecciones.js"></script>
+        <script src="../js/agregar-pedido.js"></script>
+    </body>
+</html>

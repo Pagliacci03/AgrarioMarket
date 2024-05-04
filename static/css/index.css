@@ -1,0 +1,37 @@
+body {
+    background-image: url('../imagenes/plantaciones.jpeg');
+    background-size: cover;
+}
+
+.container {
+    border: none;
+    height: 45%;
+    width: 350px;
+    padding: 2rem;
+    padding-top: .5rem;
+    background-color: #59c459;
+    text-align: center;
+    border-radius: 15px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#title {
+    color:black;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.button_index {
+    border: none;
+    background-color: #318f1e;
+    color: #ffffff;
+    border-radius: 8px;
+    font-size: 15px;
+    padding: 2% 5%;
+    width: 90%;
+    cursor: pointer;
+    margin: 10px;
+}
