@@ -1,0 +1,44 @@
+body {
+    background-image: url('../imagenes/plantaciones.jpeg');
+    background-size: cover;
+    background-position: top;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+th {
+    background-color: #318f1e;
+}
+
+tr:nth-child(odd) {
+    background-color: #318f1e;
+}
+
+tr:nth-child(even) {
+    background-color: #59c459;
+}
+
+#index {
+    border: none;
+    color: #000000;
+    border-radius: 8px;
+    font-size: 17px;
+    font-weight: bold;
+    padding: 2% 5%;
+    width: 300px;
+    cursor: pointer;
+    background-color: #b80909;
+}
+
+.button_container {
+    text-align: center;
+}
