@@ -3,29 +3,32 @@
     <head>
         <meta charset="utf-8">
         <title>Indice</title>
-        <link rel="stylesheet" href="../css/index.css">
-        <style id="operaUserStyle"></style>
+        <link
+        rel="stylesheet"
+        type="text/css"
+        href="{{ url_for('static', filename='css/index.css')}}"
+        />
     </head>
     <body>
         <div class="container">
             <div>
                 <p id="title">Indice</p>
             </div>
-            <form class="botones" id="index_form">
+            <form class="botones" id="index_form" action="/" method="post">
                 <div>
-                    <button type="button" id="AgregarProducto" class="button_index">Agregar producto</button>
+                    <input type="submit" id="AgregarProducto" class="button_index" name="index_button" value="Agregar Producto">
                 </div>
                 <div>
-                    <button type="button" id="VerProductos" class="button_index">Ver productos</button>
+                    <input type="submit" id="VerProductos" class="button_index" name="index_button" value="Ver Productos">
                 </div>
                 <div>
-                    <button type="button" id="AgregarPedido" class="button_index">Agregar pedido</button>
+                    <input type="submit" id="AgregarPedido" class="button_index" name="index_button" value="Agregar Pedido">
                 </div>
                 <div>
-                    <button type="button" id="VerPedidos" class="button_index">Ver pedidos</button>
+                    <input type="submit" id="VerPedidos" class="button_index" name="index_button" value="Ver Pedidos">
                 </div>
             </form>
         </div>
-        <script src="../js/index.js"></script>
+        <!-- <script src="../js/index.js"></script> -->
     </body>
 </html>
