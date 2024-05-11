@@ -20,3 +20,12 @@ def get_conn():
         charset=DB_CHARSET
     )
     return conn
+
+def get_producto():
+    sql = "SELECT id, tipo, descripcion, comuna_id, nombre_productor, email_productor, celular_productor FROM producto ORDER BY id DESC"
+    conn = get_conn()
+    cursor = conn.cursor()
+    cursor.execute(sql)
+    conn.commit()
+    productos = cursor.fetchall()
+    return productos
