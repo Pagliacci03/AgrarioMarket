@@ -34,8 +34,23 @@ def agregarProducto():
     
 @app.route("/ver-productos", methods=["GET", "POST"])
 def verProductos():
-    if request.method == "GET":
-        return render_template("ver-productos.html")
+    data_products = []
+    for product in db.get_producto():
+        product_id, tipo, _, comuna_id, _, _, _ = product
+        name = db.get_name_by_id_product(product_id)
+        region = db.get_region_by_id_comuna(comuna_id)
+        comuna = db.get_comuna_by_id(comuna_id)
+        fotos = db.get_foto_by_id_product(product_id)
+
+        data_products.append({
+            "tipo": tipo,
+            "name": name,
+            "region": region,
+            "comuna": comuna,
+            "fotos": fotos
+        })
+    
+    return render_template("ver-productos.html", data=data_products)
     
 @app.route("/agregar-pedido", methods=["GET", "POST"])
 def agregarPedido():
