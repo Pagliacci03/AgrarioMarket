@@ -21,11 +21,11 @@ def get_conn():
     )
     return conn
 
-def get_producto():
-    sql = "SELECT id, tipo, descripcion, comuna_id, nombre_productor, email_productor, celular_productor FROM producto ORDER BY id DESC"
+def get_producto(left, right):
+    sql = "SELECT id, tipo, descripcion, comuna_id, nombre_productor, email_productor, celular_productor FROM producto ORDER BY id DESC LIMIT %s, %s"
     conn = get_conn()
     cursor = conn.cursor()
-    cursor.execute(sql)
+    cursor.execute(sql, (left, right))
     conn.commit()
     productos = cursor.fetchall()
     return productos

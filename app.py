@@ -3,6 +3,9 @@ from database import db
 
 app = Flask(__name__)
 
+limit_left = 0
+limit_right = 5
+
 
 @app.route("/", methods=["GET", "POST"])
 def index():
@@ -35,7 +38,7 @@ def agregarProducto():
 @app.route("/ver-productos", methods=["GET", "POST"])
 def verProductos():
     data_products = []
-    for product in db.get_producto():
+    for product in db.get_producto(limit_left, limit_right):
         product_id, tipo, _, comuna_id, _, _, _ = product
         name = db.get_name_by_id_product(product_id)
         region = db.get_region_by_id_comuna(comuna_id)
