@@ -29,3 +29,39 @@ def get_producto():
     conn.commit()
     productos = cursor.fetchall()
     return productos
+
+def get_name_by_id_product(id):
+    sql = "SELECT TVF.nombre FROM tipo_verdura_fruta TVF, producto_verdura_fruta PVF WHERE TVF.id=PVF.tipo_verdura_fruta_id AND PVF.producto_id=%s"
+    conn = get_conn()
+    cursor = conn.cursor()
+    cursor.execute(sql, (id,))
+    conn.commit()
+    product_names = cursor.fetchall()
+    return product_names
+
+def get_region_by_id_comuna(id):
+    sql = "SELECT REG.nombre FROM region REG, comuna COM WHERE REG.id = COM.region_id AND COM.id=%s"
+    conn = get_conn()
+    cursor = conn.cursor()
+    cursor.execute(sql, (id,))
+    conn.commit()
+    region = cursor.fetchall()
+    return region
+
+def get_comuna_by_id(id):
+    sql = "SELECT nombre FROM comuna WHERE COM.id=%s"
+    conn = get_conn()
+    cursor = conn.cursor()
+    cursor.execute(sql, (id,))
+    conn.commit()
+    comuna = cursor.fetchall()
+    return comuna
+
+def get_foto_by_id_product(id):
+    sql = "SELECT ruta_archivo, nombre_archivo FROM foto WHERE producto_id=%s"
+    conn = get_conn()
+    cursor = conn.cursor()
+    cursor.execute(sql, (id,))
+    conn.commit()
+    fotos = cursor.fetchall()
+    return fotos
