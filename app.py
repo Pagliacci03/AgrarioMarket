@@ -93,16 +93,16 @@ def agregarProducto():
                         secure_filename(img.filename).encode("utf-8")
                         ).hexdigest()
                     _extension = filetype.guess(img).extension
-                    img_filename = f"{_filename}_{str(uuid.uuid4())}.{_extension}"
+                    img_filename = f"{_filename}_{str(uuid.uuid4())}"
 
-                    # guardar la imagen en una carpeta
-                    img_path = os.path.join(app.config["UPLOAD_FOLDER"], img_filename)
+                    # guardar la imagen y sus distintas resoluciones en una carpeta
+                    img_path = os.path.join(app.config["UPLOAD_FOLDER"], img_filename + f".{_extension}")
                     img.save(img_path)
                     sizes = [(120, 120), (640, 480), (1280, 1024)]
                     for size in sizes:
                         with Image.open(img_path) as temp_img:
                             resized_img = temp_img.resize(size)
-                            resized_path = os.path.join(app.config["UPLOAD_FOLDER"], _filename + f"_size_{size[0]}_{size[1]}.{_extension}")
+                            resized_path = os.path.join(app.config["UPLOAD_FOLDER"], img_filename + f"_size_{size[0]}_{size[1]}.{_extension}")
                             resized_img.save(resized_path)
 
                     # guardar los datos del archivo en la base de datos
