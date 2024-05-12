@@ -38,3 +38,33 @@ def get_comunas_by_region(region):
     conn.commit()
     comunas = cursor.fetchall()
     return comunas
+
+def is_product(product):
+    sql = "SELECT nombre FROM tipo_verdura_fruta WHERE nombre=%s"
+    conn = get_conn()
+    cursor = conn.cursor()
+    cursor.execute(sql, (product,))
+    conn.commit()
+    if cursor.fetchall():
+        return True
+    return False
+
+def is_region(region):
+    sql = "SELECT nombre FROM region WHERE nombre=%s"
+    conn = get_conn()
+    cursor = conn.cursor()
+    cursor.execute(sql, (region,))
+    conn.commit()
+    if cursor.fetchall():
+        return True
+    return False
+
+def is_comuna(comuna):
+    sql = "SELECT nombre FROM comuna WHERE nombre=%s"
+    conn = get_conn()
+    cursor = conn.cursor()
+    cursor.execute(sql, (comuna,))
+    conn.commit()
+    if cursor.fetchall():
+        return True
+    return False
