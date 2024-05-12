@@ -105,8 +105,10 @@ def agregarProducto():
                             resized_path = os.path.join(app.config["UPLOAD_FOLDER"], img_filename + f"_size_{size[0]}_{size[1]}.{_extension}")
                             resized_img.save(resized_path)
 
+                            db.create_image(resized_path, img_filename + f"_size_{size[0]}_{size[1]}.{_extension}", product_id)
+
                     # guardar los datos del archivo en la base de datos
-                    db.create_image(img_path, img_filename, product_id)
+                    db.create_image(img_path, img_filename + f".{_extension}", product_id)
 
                 return redirect(url_for("index"))
         
