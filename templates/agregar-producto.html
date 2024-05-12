@@ -59,22 +59,9 @@
                         <td>
                             <select id="region" class="selection">
                                 <option value="" disabled selected>Seleccione una opción</option>
-                                <option value="arica">Región de Arica y Parinacota</option>
-                                <option value="tarapaca">Región de Tarapacá</option>
-                                <option value="antofagasta">Región de Antofagasta</option>
-                                <option value="atacama">Región de Atacama</option>
-                                <option value="coquimbo">Región de Coquimbo</option>
-                                <option value="valparaiso">Región de Valparaíso</option>
-                                <option value="metropolitana">Región Metropolitana</option>
-                                <option value="ohiggins">Región del Libertador General Bernardo O'Higgins</option>
-                                <option value="maule">Región del Maule</option>
-                                <option value="nuble">Región de Ñuble</option>
-                                <option value="biobio">Región del Biobío</option>
-                                <option value="araucania">Región de La Araucanía</option>
-                                <option value="rios">Región de Los Ríos</option>
-                                <option value="lagos">Región de Los Lagos</option>
-                                <option value="aysen">Región de Aysén del General Carlos Ibáñez del Campo</option>
-                                <option value="magallanes">Región de Magallanes y de la Antártica Chilena</option>
+                                {% for region in regiones %}
+                                    <option value="{{ region }}">{{ region }}</option>
+                                {% endfor %}
                             </select>
                         </td>
                     </tr>

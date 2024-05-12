@@ -21,11 +21,20 @@ def get_conn():
     )
     return conn
 
-def get_product_by_type(type):
-    sql = "SELECT TVF.nombre FROM tipo_verdura_fruta TVF, producto_verdura_fruta PVF, producto P WHERE P.id=PVF.producto_id AND PVF.tipo_verdura_fruta_id=TVF.id AND P.tipo=%s"
+def get_regiones():
+    sql = "SELECT nombre FROM region"
     conn = get_conn()
     cursor = conn.cursor()
-    cursor.execute(sql, (type,))
+    cursor.execute(sql)
     conn.commit()
-    productos = cursor.fetchall()
-    return productos
+    regiones = cursor.fetchall()
+    return regiones
+
+def get_comunas_by_region(region):
+    sql = "SELECT C.nombre FROM region R, comuna C WHERE R.id=C.region_id AND R.nombre=%s"
+    conn = get_conn()
+    cursor = conn.cursor()
+    cursor.execute(sql, (region,))
+    conn.commit()
+    comunas = cursor.fetchall()
+    return comunas

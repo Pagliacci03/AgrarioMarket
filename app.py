@@ -27,17 +27,20 @@ def index():
             return render_template("index.html")
         
 
-@app.route("/productos")
-def productos():
-    type = request.args.get('tipo')
-    productos = db.get_product_by_type(type)
-    return jsonify(productos)
+@app.route("/comunas")
+def comunas():
+    region = request.args.get('region')
+    comunas = db.get_comunas_by_region(region)
+    return jsonify(comunas)
 
 
 @app.route("/agregar-producto", methods=["GET", "POST"])
 def agregarProducto():
     if request.method == "GET":
-        return render_template("agregar-producto.html")
+        regiones = []
+        for name in db.get_regiones():
+            regiones.append(name[0])
+        return render_template("agregar-producto.html", regiones=regiones)
     
 @app.route("/ver-productos", methods=["GET", "POST"])
 def verProductos():

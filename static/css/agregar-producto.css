@@ -5,7 +5,7 @@ body {
     background-position: top;
 }
 
-.container_producto {
+.container {
     border: none;
     height: 50%;
     width: 800px;
@@ -25,13 +25,13 @@ body {
     text-align: center;
 }
 
-.input_grupo {
+.input {
     display: flex;
     flex-direction: column;
     margin: 20px;
 }
 
-.button_producto {
+.button {
     border: none;
     color: #000000;
     border-radius: 8px;
@@ -59,7 +59,7 @@ label {
     font-size: 15px;
 }
 
-.menu_selection {
+.selection {
     border: none;
     color: #ffffff;
     border-radius: 8px;
@@ -71,7 +71,7 @@ label {
     text-align: center;
 }
 
-.input_text {
+.text {
     border: none;
     color: #000000;
     border-radius: 4px;
