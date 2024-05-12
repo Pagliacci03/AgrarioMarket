@@ -152,6 +152,7 @@ const change_comuna_select = () => {
                 data.forEach(comuna => {
                     let option = document.createElement("option");
                     option.text = comuna;
+                    option.value = comuna;
                     comunas.add(option);
                 });
             });
@@ -180,6 +181,8 @@ const files_selection = () => {
         let new_input_file = document.createElement("input");
         new_input_file.type = "file";
         new_input_file.className = "selection";
+        new_input_file.name = "image";
+        new_input_file.accept = "image/*";
         input_files.appendChild(new_input_file);
 
         const br = document.createElement("br");

@@ -1,5 +1,5 @@
 import filetype
-import database.db as db
+from database import db
 import re
 
 
@@ -28,12 +28,12 @@ def validate_img(images):
     ALLOWED_MIMETYPES = {"image/jpeg", "image/png", "image/gif"}
 
     for img in images:
+        ftype_guess = filetype.guess(img)
         if img is None:
-            return False
-
+               return False
         if img.filename == "":
             return False
-        
+            
         ftype_guess = filetype.guess(img)
         if ftype_guess.extension not in ALLOWED_EXTENSIONS:
             return False

@@ -14,7 +14,7 @@
             <div>
                 <p id="title">Agregar Producto</p>
             </div>
-            <form action="" method="post">
+            <form action="" method="post" enctype="multipart/form-data">
                 <table>
                     <tr class="input">
                         <td>
@@ -41,7 +41,7 @@
                             <label for="description">Descripción (opcional)</label>
                         </td>
                         <td>
-                            <textarea rows="4" cols="50" id="description" class="text"></textarea>
+                            <textarea rows="4" cols="50" name="description" id="description" class="text"></textarea>
                         </td>
                     </tr>
                     <tr class="input">
@@ -57,7 +57,7 @@
                             <label for="region">Región</label>
                         </td>
                         <td>
-                            <select id="region" class="selection">
+                            <select name="region" id="region" class="selection">
                                 <option value="" disabled selected>Seleccione una opción</option>
                                 {% for region in regiones %}
                                     <option value="{{ region }}">{{ region }}</option>
@@ -70,7 +70,7 @@
                             <label for="comunas">Comuna</label>
                         </td>
                         <td>
-                            <select id="comunas" class="selection">
+                            <select name="comuna" id="comunas" class="selection">
                                 <option value="" disabled selected>Seleccione la región del producto(s)</option>
                             </select>
                         </td>
