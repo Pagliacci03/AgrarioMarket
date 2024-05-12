@@ -15,13 +15,13 @@
                 <p id="title">Agregar Producto</p>
             </div>
             <form action="" method="post">
-                <table>
+                <table id="addProduct_table">
                     <tr class="input">
                         <td>
-                            <label>Tipo de Producto</label>
+                            <label for="type">Tipo de Producto</label>
                         </td>
                         <td>
-                            <select name="type" class="selection">
+                            <select name="type" id="type" class="selection">
                                 <option value="" disabled selected>Seleccione una opción</option>
                                 <option value="fruta">Fruta</option>
                                 <option value="verdura">Verdura (Hortaliza)</option>
@@ -32,16 +32,8 @@
                         <td>
                             <label>Producto</label>
                         </td>
-                        <td>
-                            {% if products %}
-                                <label>Seleccione entre 1 a 5 productos</label>
-                                    {% for name in products %}
-                                        <input type="checkbox" class="checkbox" name="{{ name }}" value="{{ name }}">
-                                        <label for="{{ name }}">{{ name }}</label><br>
-                                    {% endfor %}
-                            {% else %}
-                                <label>Seleccione un tipo de producto</label>
-                            {% endif %}
+                        <td id="products">
+                            <label>Seleccione un tipo de producto</label>
                         </td>
                     </tr>
                     <tr class="input">
@@ -49,15 +41,15 @@
                             <label for="description">Descripción (opcional)</label>
                         </td>
                         <td>
-                            <textarea rows="4" cols="50" id="description" name="description" class="text"></textarea>
+                            <textarea rows="4" cols="50" id="description" class="text"></textarea>
                         </td>
                     </tr>
                     <tr class="input">
                         <td>
                             <label for="image">Fotos del Producto</label>
                         </td>
-                        <td>
-                            <input id="image" name="image" type="file" accept="image/*" class="selection">
+                        <td id="files">
+                            <input type="file" id="image" name="image" accept="image/*" class="selection">
                         </td>
                     </tr>
                     <tr class="input">
@@ -67,9 +59,22 @@
                         <td>
                             <select id="region" class="selection">
                                 <option value="" disabled selected>Seleccione una opción</option>
-                                    {% for region in regiones %}
-                                        <option value="region">{{ region }}</option>
-                                    {% endfor %}
+                                <option value="arica">Región de Arica y Parinacota</option>
+                                <option value="tarapaca">Región de Tarapacá</option>
+                                <option value="antofagasta">Región de Antofagasta</option>
+                                <option value="atacama">Región de Atacama</option>
+                                <option value="coquimbo">Región de Coquimbo</option>
+                                <option value="valparaiso">Región de Valparaíso</option>
+                                <option value="metropolitana">Región Metropolitana</option>
+                                <option value="ohiggins">Región del Libertador General Bernardo O'Higgins</option>
+                                <option value="maule">Región del Maule</option>
+                                <option value="nuble">Región de Ñuble</option>
+                                <option value="biobio">Región del Biobío</option>
+                                <option value="araucania">Región de La Araucanía</option>
+                                <option value="rios">Región de Los Ríos</option>
+                                <option value="lagos">Región de Los Lagos</option>
+                                <option value="aysen">Región de Aysén del General Carlos Ibáñez del Campo</option>
+                                <option value="magallanes">Región de Magallanes y de la Antártica Chilena</option>
                             </select>
                         </td>
                     </tr>
@@ -79,14 +84,7 @@
                         </td>
                         <td>
                             <select id="comunas" class="selection">
-                                {% if comunas %}
-                                    <option value="" disabled selected>Seleccione una opción</option>
-                                        {% for comuna in comunas %}
-                                            <option value="comuna">{{ comuna }}</option>
-                                        {% endfor %}
-                                {% else %}
-                                    <option value="" disabled selected>Seleccione la región del producto(s)</option>
-                                {% endif %}
+                                <option value="" disabled selected>Seleccione la región del producto(s)</option>
                             </select>
                         </td>
                     </tr>
@@ -116,8 +114,7 @@
                     </tr>
                     <tr class="botones">
                         <td colspan="2">
-                            <input type="submit" id="index" class="button" name="index" value="Indice">
-                            <input type="submit" id="add_products" class="button" name="add_products" value="Agregar Producto">
+                            <input type="submit" id="add_products" class="button">Agregar Producto(s)</button>
                         </td>
                     </tr>
                 </table>
@@ -136,9 +133,6 @@
               <button id="aceptar" class="modal_button">Aceptar</button>
             </div>
         </dialog>
-        <script src="../js/backToIndex.js"></script>
-        <script src="../js/validaciones.js"></script>
-        <script src="../js/selecciones.js"></script>
-        <script src="../js/agregar-producto.js"></script>
+        <script src="{{ url_for('static', filename='js/selecciones.js') }}"></script>
     </body>
 </html>

@@ -1,31 +1,3 @@
-// --- Files Selection ---
-
-/**
- * @description Valor del contenedor para subir archivos.
- * @type {Element}
- */
-const files_input = document.getElementById("files");
-
-
-/**
- * Hace que aparezca un nuevo input para subir archivos al subir uno.
- */
-const files_selection = () => {
-    const upload_files = files_input.querySelectorAll('input[type="file"]');
-    if (upload_files.length < 3) {
-        let input_file = document.createElement("input");
-        input_file.type = "file";
-        input_file.className = "menu_selection";
-        files_input.appendChild(input_file);
-    }
-};
-
-
-files_input.addEventListener("change", files_selection);
-
-
-
-
 // --- Form Handling ---
 
 /**

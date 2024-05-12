@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, redirect, url_for
+from flask import Flask, request, render_template, redirect, url_for, jsonify
 from database import db
 
 app = Flask(__name__)
@@ -27,14 +27,17 @@ def index():
             return render_template("index.html")
         
 
+@app.route("/productos")
+def productos():
+    type = request.args.get('tipo')
+    productos = db.get_product_by_type(type)
+    return jsonify(productos)
+
+
 @app.route("/agregar-producto", methods=["GET", "POST"])
 def agregarProducto():
-    type_product = request.args.get("type")
-    products = []
-    if type_product:
-        for name in db.get_product_by_type(type_product):
-            products.append(name)
-    return render_template("agregar-producto.html", products=products)
+    if request.method == "GET":
+        return render_template("agregar-producto.html")
     
 @app.route("/ver-productos", methods=["GET", "POST"])
 def verProductos():

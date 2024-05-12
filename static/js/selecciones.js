@@ -1,146 +1,54 @@
-// --- Selection Menu ---
-
-/**
- * Genera nuevas opciones para un menu de selección dependiendo de la opción escogida en otro.
- * 
- * @param {Map} dicc_select - Diccionario que contiene como clave el valor de una opción de un select, 
- *                            y como valor las opciones asociadas a esa clave para el nuevo menu. 
- * @param {Element} independent_select - Elemento que contiene el valor de la opción escogida en un menu sin dependencias.
- * @param {Element} dependent_select - Elemento que contiene el menu de selección que depende de la variable anterior.
- * @param {String} message - String que contiene la opción marcada de default en el menu de selección.
- */
-const change_select = (dicc_select, independent_select, dependent_select, message) => {
-
-    dependent_select.innerHTML = "";
-    let defaultOption = document.createElement("option");
-    defaultOption.text = message;
-    defaultOption.disabled = true;
-    defaultOption.selected = true;
-    dependent_select.add(defaultOption);
-
-    let options = dicc_select.get(independent_select.value);
-
-    options.forEach(optionText => {
-        let option = document.createElement("option");
-        option.text = optionText;
-        dependent_select.add(option);
-    });
-};
-
-
-
-
 // --- Select menu for the product ---
 
 /**
  * @description Valor del menu independiente (los tipos de producto).
  * @type {Element}
  */
-const independent_select_pt = document.getElementById("product_type");
+const type_selected = document.getElementById("type");
 
 
 /**
  * @description Valor del menu dependiente (los productos).
  * @type {Element}
  */
-let dependent_select_p = document.getElementById("products");
-
-
-/**
- * @description Diccionario que contiene el tipo de producto seguido de una lista de los productos disponibles para ese tipo.
- * @type {Map}
- */
-const dicc_products = new Map([["fruta", [
-    "Arándano", 
-    "Frambuesa", 
-    "Frutilla", 
-    "Grosella", 
-    "Mora", 
-    "Limón", 
-    "Mandarina", 
-    "Naranja", 
-    "Pomelo", 
-    "Melón", 
-    "Sandía", 
-    "Palta", 
-    "Chirimoya", 
-    "Coco", 
-    "Dátil", 
-    "Kiwi", 
-    "Mango", 
-    "Papaya", 
-    "Piña", 
-    "Plátano", 
-    "Damasco", 
-    "Cereza", 
-    "Ciruela", 
-    "Higo", 
-    "Kaki", 
-    "Manzana", 
-    "Durazno", 
-    "Nectarin", 
-    "Níspero", 
-    "Pera", 
-    "Uva", 
-    "Almendra", 
-    "Avellana", 
-    "Maní", 
-    "Castaña", 
-    "Nuez", 
-    "Pistacho"
-]], ["verdura", [
-    "Brócoli", 
-    "Repollo", 
-    "Coliflor", 
-    "Rábano", 
-    "Alcachofa", 
-    "Lechuga", 
-    "Zapallo", 
-    "Pepino", 
-    "Haba", 
-    "Maíz", 
-    "Champiñon", 
-    "Acelga", 
-    "Apio", 
-    "Espinaca", 
-    "Perejil", 
-    "Ajo", 
-    "Cebolla", 
-    "Espárrago", 
-    "Puerro", 
-    "Remolacha", 
-    "Berenjena", 
-    "Papa", 
-    "Pimiento", 
-    "Tomate", 
-    "Zanahoria"
-]]]);
+let products = document.getElementById("products");
 
 
 /**
  * Función que genera nuevas opciones para el menu de selección de los productos según el tipo de producto escogido.
  */
 const change_product_select = () => {
-    let productType = independent_select_pt.value;
-    let productsList = dicc_products.get(productType);
+    let product_type = type_selected.options[type_selected.selectedIndex].value;
 
-    dependent_select_p.innerHTML = ""; // Limpiar el contenido anterior
+    if (product_type) {
+        fetch('/productos?tipo=' + product_type)
+            .then(response => response.json())
+            .then( data => {
+                products.innerHTML = ""; // Limpiar el contenido anterior
 
-    productsList.forEach(product => {
-        let checkbox = document.createElement("input");
-        checkbox.type = "checkbox";
-        checkbox.name = "product_checkbox";
-        checkbox.value = product;
+                let label = document.createElement("label");
+                label.textContent = "Seleccione de 1 a 5 productos";
+                products.appendChild(label);
+                const br = document.createElement("br");
+                products.appendChild(br)
 
-        let label = document.createElement("label");
-        label.textContent = product;
+                data.forEach(product => {
+                    let checkbox = document.createElement("input");
+                    checkbox.type = "checkbox";
+                    checkbox.name = "product_checkbox";
+                    checkbox.value = product;
 
-        const br = document.createElement("br");
+                    let label = document.createElement("label");
+                    label.textContent = product;
 
-        dependent_select_p.appendChild(checkbox);
-        dependent_select_p.appendChild(label);
-        dependent_select_p.appendChild(br);
-    });
+                    const br = document.createElement("br");
+
+                    products.appendChild(checkbox);
+                    products.appendChild(label);
+                    products.appendChild(br);
+                });
+            });
+    }
 };
 
 
@@ -153,14 +61,14 @@ const change_product_select = () => {
  * @description Valor del menu independiente (las regiones).
  * @type {Element}
  */
-const independent_select_r = document.getElementById("region");
+const region_selected = document.getElementById("region");
 
 
 /**
  * @description Valor del menu dependiente (las comunas).
  * @type {Element}
  */
-let dependent_select_c = document.getElementById("comunas");
+let comunas = document.getElementById("comunas");
 
 /**
  * @description Diccionario que contiene la region del producto seguido de una lista con las comunas de esa región.
@@ -558,13 +466,55 @@ for (const [region, valores] of dicc_regiones) {
  * Función que genera nuevas opciones para el menu de selección de las comunas según la región escogida.
  */
 const change_comuna_select = () => {
-    change_select(dicc_regiones, independent_select_r, dependent_select_c, "Seleccione una opción");
+    comunas.innerHTML = "";
+
+    let defaultOption = document.createElement("option");
+    defaultOption.text = "Seleccione una opción";
+    defaultOption.disabled = true;
+    defaultOption.selected = true;
+    comunas.add(defaultOption);
+
+    let options = dicc_regiones.get(region_selected.value);
+
+    options.forEach(optionText => {
+        let option = document.createElement("option");
+        option.text = optionText;
+        comunas.add(option);
+    });
 };
+
+
+
+
+
+// --- Files Selection ---
+
+/**
+ * @description Valor del contenedor para subir archivos.
+ * @type {Element}
+ */
+const input_files = document.getElementById("files");
+
+
+/**
+ * Hace que aparezca un nuevo input para subir archivos al subir uno.
+ */
+const files_selection = () => {
+    const upload_files = input_files.querySelectorAll('input[type="file"]');
+    if (upload_files.length < 3) {
+        let new_input_file = document.createElement("input");
+        new_input_file.type = "file";
+        new_input_file.className = "menu_selection";
+        input_files.appendChild(new_input_file);
+    }
+};
+
 
 
 
 
 // --- Event Listener ---
 
-independent_select_pt.addEventListener("change", change_product_select);
-independent_select_r.addEventListener("change", change_comuna_select);
+type_selected.addEventListener("change", change_product_select);
+input_files.addEventListener("change", files_selection);
+region_selected.addEventListener("change", change_comuna_select);

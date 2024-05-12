@@ -22,7 +22,7 @@ def get_conn():
     return conn
 
 def get_product_by_type(type):
-    sql = "SELECT TVF.nombre FROM tipo_verdura_fruta TVF, producto_verdura_fruta PVF, producto P WHERE P.id=PVF.product_id AND PVF.tipo_verdura_fruta_id=TVF.id AND P.tipo=%s"
+    sql = "SELECT TVF.nombre FROM tipo_verdura_fruta TVF, producto_verdura_fruta PVF, producto P WHERE P.id=PVF.producto_id AND PVF.tipo_verdura_fruta_id=TVF.id AND P.tipo=%s"
     conn = get_conn()
     cursor = conn.cursor()
     cursor.execute(sql, (type,))
