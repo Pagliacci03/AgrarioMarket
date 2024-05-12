@@ -1,16 +1,16 @@
 // --- Aux functions ---
 
 /**
- * Determina si un valor se encuentra en un intervalo.
+ * Determina si un valor n se encuentra en un intervalo.
  * 
- * @param {Number} len - Cantidad de elementos en un objeto (cantidad de archivos, cantidad de caracteres en un string). 
+ * @param {Number} n - Cantidad de elementos en un objeto (cantidad de archivos, cantidad de caracteres en un string). 
  * @param {Number} i - Inicio del intervalo.
  * @param {Number} j - Final del intervalo.
  * 
  * @return {Boolean} - True si el valor esta en el rango y false en caso contrario.
  */
-const validateRange = (len, i, j) => {
-    return len >= i && len <= j;
+const validateRange = (n, i, j) => {
+    return n >= i && n <= j;
 };
 
 
@@ -20,7 +20,7 @@ const validateRange = (len, i, j) => {
  * 
  * @param {String} email - Email del usuario. 
  * 
- * @return {Array} - Retorna un arreglo con todas las partes si es que se cumple que @ y . se estan en el input 
+ * @return {Array} - Retorna un arreglo con todas las partes si es que se cumple que @ y . estan en el input 
  *                   y en ese orden de aparición. En caso contrario devuelve null.
  */
 const splitEmail = email => {
@@ -42,29 +42,29 @@ const splitEmail = email => {
 /**
  * Valida los menu selects obligatorios de la página web.
  * 
- * @param {String} select_value - Valor del elemento seleccionado.
+ * @param {String} value_selected - Valor del elemento seleccionado.
  * 
  * @return {Boolean} - True si seleccionó un elemento, false en caso contrario.
  */
-const validateRequiredSelects = select_value => select_value != "" && select_value != "Seleccione una opción";
+const validateRequiredSelects = value_selected => value_selected != "" && value_selected != "Seleccione una opción";
 
 
 /**
  * Valida que los productos seleccionados hayan sido entre 1 a 5.
  * 
- * @param {Element} products_element - Elemento con los productos seleccionados.  
+ * @param {Element} products - Elemento con los productos seleccionados.  
  * 
  * @return {Boolean} - True si el cliente seleccionó de 1 a 5 productos, false en caso contrario. 
  */
-const validateProducts = products_element => {
+const validateProducts = products => {
     let count = 0;
-    const checkboxes = products_element.querySelectorAll('input[type="checkbox"]');
+    const checkboxes = products.querySelectorAll('input[type="checkbox"]');
     checkboxes.forEach(checkbox => {
         if (checkbox.checked) {
             count++;
         }
     });
-    return count >= 1 && count <= 5;
+    return validateRange(count, 1, 5);
 };
 
 
@@ -83,12 +83,12 @@ const validatePictures = Files => {
             count++;
         }
     });
-    return count >= 1 && count <= 3;
+    return validateRange(count, 1, 3);
 };
 
 
 /**
- * Valida el largo de un nombre de un productor.
+ * Valida el largo de un nombre de un productor y que solo este formado por letras.
  * 
  * @param {String} name_value - Nombre del productor. 
  * 

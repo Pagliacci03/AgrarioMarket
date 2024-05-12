@@ -15,7 +15,7 @@
                 <p id="title">Agregar Producto</p>
             </div>
             <form action="" method="post">
-                <table id="addProduct_table">
+                <table>
                     <tr class="input">
                         <td>
                             <label for="type">Tipo de Producto</label>
@@ -101,25 +101,21 @@
                     </tr>
                     <tr class="botones">
                         <td colspan="2">
-                            <input type="submit" id="add_products" class="button">Agregar Producto(s)</button>
+                            <input type="button" id="add_products" class="button" value="Agregar Producto(s)">
                         </td>
                     </tr>
                 </table>
+                <dialog id="modal_product" class="modal">
+                    <div class="modal_content">
+                      <p>¿Confirma el registro de este producto?</p>
+                      <input type="submit" id="confirmar" class="modal_button" name="confirmar" value="Sí, confirmo">
+                      <input type="button" id="cancelar" class="modal_button" name="cancelar" value="No, quiero volver al formulario">
+                    </div>
+                </dialog>
             </form>
         </div>
-        <dialog id="modal_product" class="modal_product">
-            <div class="modal_content_product">
-              <p>¿Confirma el registro de este producto?</p>
-              <button id="confirmar" class="modal_button">Sí, confirmo</button>
-              <button id="cancelar" class="modal_button">No, quiero volver al formulario</button>
-            </div>
-        </dialog>
-        <dialog id="modal_success" class="modal_product">
-            <div class="modal_content_product">
-              <p>Hemos recibido el registro del producto. Muchas gracias.</p>
-              <button id="aceptar" class="modal_button">Aceptar</button>
-            </div>
-        </dialog>
         <script src="{{ url_for('static', filename='js/selecciones.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/validaciones.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/agregar-producto.js') }}"></script>
     </body>
 </html>
