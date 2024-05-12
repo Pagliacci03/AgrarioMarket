@@ -8,7 +8,7 @@ DB_PORT = 3306
 DB_CHARSET = "utf8"
 
 
-# --- Connection ---
+# --- Connexión con la base de datos ---
 
 def get_conn():
     conn = pymysql.connect(
@@ -20,6 +20,9 @@ def get_conn():
         charset=DB_CHARSET
     )
     return conn
+
+
+# --- Obtener elementos en la base de datos ---
 
 def get_regiones():
     sql = "SELECT nombre FROM region"
@@ -38,6 +41,27 @@ def get_comunas_by_region(region):
     conn.commit()
     comunas = cursor.fetchall()
     return comunas
+
+def get_id_comuna_by_nombre(name):
+    sql = "SELECT id FROM comuna WHERE nombre=%s"
+    conn = get_conn()
+    cursor = conn.cursor()
+    cursor.execute(sql, (name,))
+    conn.commit()
+    id = cursor.fetchall()
+    return id
+
+def get_id_tvf_by_nombre(name):
+    sql = "SELECT id FROM tipo_verdura_fruta WHERE nombre=%s"
+    conn = get_conn()
+    cursor = conn.cursor()
+    cursor.execute(sql, (name,))
+    conn.commit()
+    id = cursor.fetchall()
+    return id
+
+
+# --- Ver si existe un elemento en la base de datos ---
 
 def is_product(product):
     sql = "SELECT nombre FROM tipo_verdura_fruta WHERE nombre=%s"
@@ -69,23 +93,8 @@ def is_comuna(comuna):
         return True
     return False
 
-def get_id_comuna_by_nombre(name):
-    sql = "SELECT id FROM comuna WHERE nombre=%s"
-    conn = get_conn()
-    cursor = conn.cursor()
-    cursor.execute(sql, (name,))
-    conn.commit()
-    id = cursor.fetchall()
-    return id
 
-def get_id_tvf_by_nombre(name):
-    sql = "SELECT id FROM tipo_verdura_fruta WHERE nombre=%s"
-    conn = get_conn()
-    cursor = conn.cursor()
-    cursor.execute(sql, (name,))
-    conn.commit()
-    id = cursor.fetchall()
-    return id
+# --- Agregar elementos a la base de datos ---
 
 def create_producto(product_type, description, comuna_id, productor_name, productor_email, productor_phone):
     sql = "INSERT INTO producto (tipo, descripcion, comuna_id, nombre_productor, email_productor, celular_productor) VALUES (%s,%s,%s,%s,%s,%s)"
