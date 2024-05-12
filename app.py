@@ -2,6 +2,7 @@ from flask import Flask, request, render_template, redirect, url_for, jsonify
 from database import db
 from utils import validations as vald
 from werkzeug.utils import secure_filename
+from PIL import Image
 import hashlib
 import filetype
 import os
@@ -97,6 +98,12 @@ def agregarProducto():
                     # guardar la imagen en una carpeta
                     img_path = os.path.join(app.config["UPLOAD_FOLDER"], img_filename)
                     img.save(img_path)
+                    sizes = [(120, 120), (640, 480), (1280, 1024)]
+                    for size in sizes:
+                        with Image.open(img_path) as temp_img:
+                            resized_img = temp_img.resize(size)
+                            resized_path = os.path.join(app.config["UPLOAD_FOLDER"], _filename + f"_size_{size[0]}_{size[1]}.{_extension}")
+                            resized_img.save(resized_path)
 
                     # guardar los datos del archivo en la base de datos
                     db.create_image(img_path, img_filename, product_id)
