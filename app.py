@@ -29,8 +29,12 @@ def index():
 
 @app.route("/agregar-producto", methods=["GET", "POST"])
 def agregarProducto():
-    if request.method == "GET":
-        return render_template("agregar-producto.html")
+    type_product = request.args.get("type")
+    products = []
+    if type_product:
+        for name in db.get_product_by_type(type_product):
+            products.append(name)
+    return render_template("agregar-producto.html", products=products)
     
 @app.route("/ver-productos", methods=["GET", "POST"])
 def verProductos():
