@@ -3,116 +3,121 @@
     <head>
         <meta charset="utf-8">
         <title>Agregar Producto</title>
-        <link rel="stylesheet" href="../css/agregar-producto.css">
-        <style id="operaUserStyle"></style>
+        <link
+        rel="stylesheet"
+        type="text/css"
+        href="{{ url_for('static', filename='css/agregar-producto.css')}}"
+        />
     </head>
     <body>
-        <div class="container_producto">
+        <div class="container">
             <div>
                 <p id="title">Agregar Producto</p>
             </div>
-            <form class="addProduct" id="addProduct_form">
-                <table id="addProduct_table">
-                    <tr class="input_grupo">
+            <form action="" method="post">
+                <table>
+                    <tr class="input">
                         <td>
-                            <label for="product_type">Tipo de Producto</label>
+                            <label>Tipo de Producto</label>
                         </td>
                         <td>
-                            <select name="productType" id="product_type" class="menu_selection">
+                            <select name="type" class="selection">
                                 <option value="" disabled selected>Seleccione una opción</option>
                                 <option value="fruta">Fruta</option>
                                 <option value="verdura">Verdura (Hortaliza)</option>
                             </select>
                         </td>
                     </tr>
-                    <tr class="input_grupo">
+                    <tr class="input">
                         <td>
                             <label>Producto</label>
                         </td>
-                        <td id="products">
-                            <label>Seleccione un tipo de producto</label>
+                        <td>
+                            {% if products %}
+                                <label>Seleccione entre 1 a 5 productos</label>
+                                    {% for name in products %}
+                                        <input type="checkbox" class="checkbox" name="{{ name }}" value="{{ name }}">
+                                        <label for="{{ name }}">{{ name }}</label><br>
+                                    {% endfor %}
+                            {% else %}
+                                <label>Seleccione un tipo de producto</label>
+                            {% endif %}
                         </td>
                     </tr>
-                    <tr class="input_grupo">
+                    <tr class="input">
                         <td>
                             <label for="description">Descripción (opcional)</label>
                         </td>
                         <td>
-                            <textarea rows="4" cols="50" id="description" class="input_text"></textarea>
+                            <textarea rows="4" cols="50" id="description" name="description" class="text"></textarea>
                         </td>
                     </tr>
-                    <tr class="input_grupo">
+                    <tr class="input">
                         <td>
                             <label for="image">Fotos del Producto</label>
                         </td>
-                        <td id="files">
-                            <input id="image" name="image" type="file" accept="image/*" class="menu_selection">
+                        <td>
+                            <input id="image" name="image" type="file" accept="image/*" class="selection">
                         </td>
                     </tr>
-                    <tr class="input_grupo">
+                    <tr class="input">
                         <td>
                             <label for="region">Región</label>
                         </td>
                         <td>
-                            <select id="region" class="menu_selection">
+                            <select id="region" class="selection">
                                 <option value="" disabled selected>Seleccione una opción</option>
-                                <option value="arica">Región de Arica y Parinacota</option>
-                                <option value="tarapaca">Región de Tarapacá</option>
-                                <option value="antofagasta">Región de Antofagasta</option>
-                                <option value="atacama">Región de Atacama</option>
-                                <option value="coquimbo">Región de Coquimbo</option>
-                                <option value="valparaiso">Región de Valparaíso</option>
-                                <option value="metropolitana">Región Metropolitana</option>
-                                <option value="ohiggins">Región del Libertador General Bernardo O'Higgins</option>
-                                <option value="maule">Región del Maule</option>
-                                <option value="nuble">Región de Ñuble</option>
-                                <option value="biobio">Región del Biobío</option>
-                                <option value="araucania">Región de La Araucanía</option>
-                                <option value="rios">Región de Los Ríos</option>
-                                <option value="lagos">Región de Los Lagos</option>
-                                <option value="aysen">Región de Aysén del General Carlos Ibáñez del Campo</option>
-                                <option value="magallanes">Región de Magallanes y de la Antártica Chilena</option>
+                                    {% for region in regiones %}
+                                        <option value="region">{{ region }}</option>
+                                    {% endfor %}
                             </select>
                         </td>
                     </tr>
-                    <tr class="input_grupo">
+                    <tr class="input">
                         <td>
                             <label for="comunas">Comuna</label>
                         </td>
                         <td>
-                            <select id="comunas" class="menu_selection">
-                                <option value="" disabled selected>Seleccione la región del producto(s)</option>
+                            <select id="comunas" class="selection">
+                                {% if comunas %}
+                                    <option value="" disabled selected>Seleccione una opción</option>
+                                        {% for comuna in comunas %}
+                                            <option value="comuna">{{ comuna }}</option>
+                                        {% endfor %}
+                                {% else %}
+                                    <option value="" disabled selected>Seleccione la región del producto(s)</option>
+                                {% endif %}
                             </select>
                         </td>
                     </tr>
-                    <tr class="input_grupo">
+                    <tr class="input">
                         <td>
                             <label for="name">Nombre del productor</label>
                         </td>
                         <td>
-                            <input id="name" name="name" type="text" size="80" class="input_text">
+                            <input type="text" id="name" name="name" size="80" class="text">
                         </td>
                     </tr>
-                    <tr class="input_grupo">
+                    <tr class="input">
                         <td>
                             <label for="email">Email del productor</label>
                         </td>
                         <td>
-                            <input id="email" name="email" type="email" size="30" class="input_text">
+                            <input type="email" id="email" name="email" size="30" class="text">
                         </td>
                     </tr>
-                    <tr class="input_grupo">
+                    <tr class="input">
                         <td>
                             <label for="phone">Número celular del productor (opcional)</label>
                         </td>
                         <td>
-                            +569<input id="phone" name="phone" type="text" size="15" class="input_text">
+                            +569<input type="text" id="phone" name="phone" size="15" class="text">
                         </td>
                     </tr>
                     <tr class="botones">
                         <td colspan="2">
-                            <button type="button" id="index" class="button_producto">Indice</button>
-                            <button type="button" id="add_products" class="button_producto">Agregar Producto(s)</button>
+                            <input type="submit" id="index" class="button" name="index" value="Indice">
+                            <input type="submit" id="add_products" class="button" name="add_products" value="Agregar Producto">
                         </td>
                     </tr>
                 </table>
