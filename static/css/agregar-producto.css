@@ -30,6 +30,11 @@ table {
     margin-top: 0;
 }
 
+#error {
+    color: #b80909;
+    font-weight: bold;
+}
+
 .input {
     display: flex;
     flex-direction: column;
