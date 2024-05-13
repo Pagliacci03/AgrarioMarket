@@ -29,6 +29,13 @@ tr:nth-child(even) {
     background-color: #59c459;
 }
 
+#page {
+    color: #000000;
+    font-size: 17px;
+    font-weight: bold;
+    text-align: center;
+}
+
 #go_to {
     width: 100%;
     text-align: center;

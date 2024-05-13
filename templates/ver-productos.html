@@ -37,7 +37,7 @@
                     </tr>
                     {% if productos %}
                         {% for producto in productos %}
-                            <tr>
+                            <tr onclick="redirect_to_info('{{ producto.id }}')">
                                 <td>{{ producto.tipo }}</td>
                                 <td>{{ producto.name }}</td>
                                 <td>{{ producto.region }}</td>
@@ -52,6 +52,9 @@
                     {% endif %}
                     <tr>
                         <td colspan="5">
+                            <div>
+                                <p id="page">Página {{ page }}</p>
+                            </div>
                             <div id="go_to">
                                 {% if notfirst %}
                                     <input type="submit" id="back" class="button" name="back" value="Anterior">
@@ -65,5 +68,6 @@
                 </tbody>
             </table>
         </form>
+        <script src="{{ url_for('static', filename='js/ver-productos.js') }}"></script>
     </body>
 </html>

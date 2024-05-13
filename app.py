@@ -183,6 +183,7 @@ def verProductos(pagina):
                 urls.append(p_img)
 
             productos.append({
+                "id": product_id,
                 "tipo": tipo,
                 "name": names,
                 "region": region,
@@ -190,8 +191,18 @@ def verProductos(pagina):
                 "fotos": urls
             })
 
-        return render_template("ver-productos.html", productos=productos, notfirst=notfirst, notlast=notlast)
-    
+        return render_template("ver-productos.html", productos=productos, notfirst=notfirst, notlast=notlast, page=(page+1))
+
+
+
+
+# --- Información Producto ---
+@app.route("/informacion-producto/<producto_id>", methods=["GET", "POST"])
+def informacionProducto(producto_id):
+    return render_template("informacion-producto.html")
+
+
+
 @app.route("/agregar-pedido", methods=["GET", "POST"])
 def agregarPedido():
     if request.method == "GET":
