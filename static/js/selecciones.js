@@ -98,6 +98,7 @@ const change_product_select = () => {
         let checkbox = document.createElement("input");
         checkbox.type = "checkbox";
         checkbox.name = "product_checkbox";
+        checkbox.class = "checkboxes";
         checkbox.value = product;
 
         let label = document.createElement("label");

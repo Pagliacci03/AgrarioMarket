@@ -16,13 +16,18 @@ body {
     border-radius: 15px;
 }
 
+table {
+    width: 100%;
+}
+
 
 
 /* Inputs del formulario */
 #title {
-    font-size: 30px;
+    font-size: 40px;
     font-weight: bolder;
     text-align: center;
+    margin-top: 0;
 }
 
 .input {
@@ -44,7 +49,14 @@ body {
 }
 
 #index {
-    background-color: #b80909;
+    background-color: #388f27;
+    font-size: 15px;
+    font-weight: bold;
+    width: 200px;
+}
+
+#back {
+    text-align: right;
 }
 
 #add_products {
@@ -53,10 +65,16 @@ body {
 
 .botones {
     margin: auto;
+    text-align: center;
 }
 
 label {
     font-size: 15px;
+    font-weight: bold;
+}
+
+#select_type {
+    color: #3f3f3f;
 }
 
 .selection {
@@ -78,16 +96,19 @@ label {
     cursor: pointer;
 }
 
-#name {
+#name, #email, #phone {
     height: 20px;
 }
 
-#email {
-    height: 20px;
-}
-
-#phone {
-    height: 20px;
+.checkboxes {
+    content: "";
+    width: 0;
+    height: 0;
+    border: 8px solid #0fbf12;
+    float: left;
+    margin-left: -1.8em;
+    margin-top: 0.8em;
+    border-radius: 100%;
 }
 
 
@@ -105,7 +126,7 @@ label {
     background-color: rgba(0, 0, 0, 0.4);
 }
 
-.modal_content_product {
+.modal_content {
     border: none;
     background-color: #59c459;
     margin: 15% auto;
@@ -132,6 +153,6 @@ label {
     background-color: #b80909;
 }
 
-#confirmar, #aceptar {
+#confirmar {
     background-color: #318f1e;
 }
