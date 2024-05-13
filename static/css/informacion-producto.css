@@ -6,8 +6,14 @@ body {
 
 
 table {
-    border-collapse: collapse;
-    width: 100%;
+    border: none;
+    height: 50%;
+    width: 800px;
+    margin: auto;
+    padding: 2rem;
+    padding-top: .5rem;
+    background-color: #59c459;
+    border-radius: 15px;
 }
 
 td, th {
@@ -35,11 +41,11 @@ tr:nth-child(even) {
     font-size: 17px;
     font-weight: bold;
     padding: 2% 5%;
-    width: 300px;
+    width: 200px;
     cursor: pointer;
-    background-color: #b80909;
+    background-color: #1f69e7;
 }
 
 .button_container {
-    text-align: center;
+    text-align: right;
 }

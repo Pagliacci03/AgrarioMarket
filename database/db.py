@@ -114,6 +114,15 @@ def get_foto_by_id_product(id):
     fotos = cursor.fetchall()
     return fotos
 
+def get_producto_by_id(id):
+    sql = "SELECT * FROM producto WHERE id=%s"
+    conn = get_conn()
+    cursor = conn.cursor()
+    cursor.execute(sql, (id,))
+    conn.commit()
+    info = cursor.fetchall()
+    return info
+
 
 # --- Ver si existe un elemento en la base de datos ---
 
