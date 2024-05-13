@@ -167,21 +167,27 @@ def verProductos(pagina):
         productos = []
         for product in db.get_producto(limit_left, limit_right):
             product_id, tipo, _, comuna_id, _, _, _ = product
-            name = db.get_name_by_id_product(product_id)[0]
+            names = ""
+            product_names = [row[0] for row in db.get_name_by_id_product(product_id)]
+            for name in product_names:
+                names += name + ", "
+            names = names[:-2]
             region = db.get_region_by_id_comuna(comuna_id)[0]
             comuna = db.get_comuna_by_id(comuna_id)[0]
-            fotos = db.get_foto_by_id_product(product_id)[0]
-
-            p_img = f"uploads/{fotos}_size_120_120"
-            _extension = os.path.splitext(fotos)[1].lower()
-            p_img += f"{_extension}"
+            urls = []
+            fotos = [row[0] for row in db.get_foto_by_id_product(product_id)]
+            for foto in fotos:
+                p_img = f"uploads/{foto}_size_120_120"
+                _extension = os.path.splitext(foto)[1].lower()
+                p_img += f"{_extension}"
+                urls.append(p_img)
 
             productos.append({
                 "tipo": tipo,
-                "name": name,
+                "name": names,
                 "region": region,
                 "comuna": comuna,
-                "fotos": url_for('static', filename=p_img)
+                "fotos": urls
             })
 
         return render_template("ver-productos.html", productos=productos, notfirst=notfirst, notlast=notlast)

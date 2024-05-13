@@ -42,7 +42,11 @@
                                 <td>{{ producto.name }}</td>
                                 <td>{{ producto.region }}</td>
                                 <td>{{ producto.comuna }}</td>
-                                <td><img src="{{ producto.fotos }}" alt="prod_1"></td>
+                                <td>
+                                    {% for foto in producto.fotos %}
+                                        <img src="{{ url_for('static', filename=foto) }}" alt="prod_1">
+                                    {% endfor %}
+                                </td>
                             </tr>
                         {% endfor %}
                     {% endif %}

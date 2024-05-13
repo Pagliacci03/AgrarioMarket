@@ -84,7 +84,7 @@ def get_name_by_id_product(id):
     cursor = conn.cursor()
     cursor.execute(sql, (id,))
     conn.commit()
-    product_names = cursor.fetchone()
+    product_names = cursor.fetchall()
     return product_names
 
 def get_region_by_id_comuna(id):
@@ -111,7 +111,7 @@ def get_foto_by_id_product(id):
     cursor = conn.cursor()
     cursor.execute(sql, (id,))
     conn.commit()
-    fotos = cursor.fetchone()
+    fotos = cursor.fetchall()
     return fotos
 
 
