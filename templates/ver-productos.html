@@ -14,8 +14,8 @@
             <table>
                 <tbody>
                     <tr>
-                        <td colspan="5">
-                            <input type="submit" id="index" class="button" name="back_to_index" value="Volver al indice">
+                        <td colspan="5" id="index">
+                            <input type="submit" id="back_to_index" class="button" name="back_to_index" value="Volver al indice">
                         </td>
                     </tr>
                     <tr>
@@ -51,17 +51,15 @@
                         {% endfor %}
                     {% endif %}
                     <tr>
-                        <td colspan="2">
-                            {% if notfirst %}
-                                <input type="submit" id="before" class="button" name="before" value="Anterior">
-                            {% endif %}
-                        </td>
-                        <td>
-                        </td>
-                        <td colspan="2">
-                            {% if notlast %}
-                                <input type="submit" id="after" class="button" name="after" value="Siguiente">
-                            {% endif %}
+                        <td colspan="5">
+                            <div id="go_to">
+                                {% if notfirst %}
+                                    <input type="submit" id="back" class="button" name="back" value="Anterior">
+                                {% endif %}
+                                {% if notlast %}
+                                    <input type="submit" id="next" class="button" name="next" value="Siguiente">
+                                {% endif %}
+                            </div>
                         </td>
                     </tr>
                 </tbody>

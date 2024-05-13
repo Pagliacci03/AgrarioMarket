@@ -69,11 +69,11 @@ def get_all_productos():
     productos = cursor.fetchall()
     return productos
 
-def get_producto(left, right):
+def get_producto(x, y):
     sql = "SELECT id, tipo, descripcion, comuna_id, nombre_productor, email_productor, celular_productor FROM producto ORDER BY id DESC LIMIT %s, %s"
     conn = get_conn()
     cursor = conn.cursor()
-    cursor.execute(sql, (left, right))
+    cursor.execute(sql, (x, y))
     conn.commit()
     productos = cursor.fetchall()
     return productos

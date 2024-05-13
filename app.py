@@ -135,7 +135,7 @@ def agregarProducto():
 def verProductos(pagina):
     page = int(pagina)
     limit_left = page * 5
-    limit_right = (page * 5) + 5
+    show = 5
     notfirst = False
     notlast = False
 
@@ -144,13 +144,13 @@ def verProductos(pagina):
 
     elementos = len(db.get_all_productos())
     last = elementos // 5 if elementos % 5 != 0 else (elementos // 5) - 1
-    if (page != last) and (elementos % 5 != 0):
+    if (page != last):
         notlast = True
 
     if request.method == "POST":
         index = request.form.get("back_to_index")
-        anterior = request.form.get("before")
-        siguiente = request.form.get("after")
+        anterior = request.form.get("back")
+        siguiente = request.form.get("next")
 
         if index:
             return redirect(url_for("index"))
@@ -165,7 +165,7 @@ def verProductos(pagina):
 
     elif request.method == "GET":
         productos = []
-        for product in db.get_producto(limit_left, limit_right):
+        for product in db.get_producto(limit_left, show):
             product_id, tipo, _, comuna_id, _, _, _ = product
             names = ""
             product_names = [row[0] for row in db.get_name_by_id_product(product_id)]
