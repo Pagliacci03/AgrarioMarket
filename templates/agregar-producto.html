@@ -21,6 +21,9 @@
                     <tr>
                         <td colspan="2">
                             <p id="title">Agregar Producto</p>
+                            {% if error %}
+                                <h id="error">{{ error }}</h>
+                            {% endif %}
                         </td>
                     </tr>
                     <tr class="input">

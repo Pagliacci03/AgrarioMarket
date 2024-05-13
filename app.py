@@ -1,6 +1,6 @@
 from flask import Flask, request, render_template, redirect, url_for, jsonify
 from database import db
-from utils import validations as vald
+from utils.validations import validate_agregar_producto, error_inputs
 from werkzeug.utils import secure_filename
 from PIL import Image
 import hashlib
@@ -58,6 +58,10 @@ def comunas():
 @app.route("/agregar-producto", methods=["GET", "POST"])
 def agregarProducto():
 
+    regiones = []
+    for name in db.get_regiones():
+        regiones.append(name[0])
+
     if request.method == "POST":
         index = request.form.get("back_to_index")
 
@@ -77,7 +81,7 @@ def agregarProducto():
             if len(files) >= 2 and len(files) <= 3 and not filetype.guess(files[-1]):
                 files = files[:-1] 
 
-            if vald.validate_agregar_producto(product_type, products, description, files, region, comuna, productor_name, productor_email, phone_number):
+            if validate_agregar_producto(product_type, products, description, files, region, comuna, productor_name, productor_email, phone_number):
                 comuna_id = db.get_id_comuna_by_nombre(comuna)
                 product_id = db.create_producto(product_type, description, comuna_id, productor_name, productor_email, phone_number)
 
@@ -111,13 +115,14 @@ def agregarProducto():
                     db.create_image(img_path, img_filename + f".{_extension}", product_id)
 
                 return redirect(url_for("index"))
+            
+            else:
+                error = error_inputs(product_type, products, files, region, comuna, productor_name, productor_email, phone_number)
+                return render_template("agregar-producto.html", regiones=regiones, error=error)
         
         else: # se presiono el boton de regreso al indice
             return redirect(url_for("index"))
 
-    regiones = []
-    for name in db.get_regiones():
-        regiones.append(name[0])
     return render_template("agregar-producto.html", regiones=regiones)
     
 

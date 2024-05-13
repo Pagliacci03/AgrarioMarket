@@ -80,3 +80,56 @@ def validate_phone_number(phone_number):
 
 def validate_agregar_producto(ptype, products, description, images, region, comuna, name, email, phone_number):
     return validate_type(ptype) and validate_product(products) and validate_description(description) and validate_img(images) and validate_region(region) and validate_comuna(comuna) and validate_name(name) and validate_email(email) and validate_phone_number(phone_number)
+
+
+def error_type(ptype):
+    if validate_type(ptype):
+        return ""
+    return "Error en el tipo elegido. "
+
+
+def error_products(products):
+    if validate_product(products):
+        return ""
+    return "Error en los productos elegidos. "
+
+
+def error_images(images):
+    if validate_img(images):
+        return ""
+    return "Error en los archivos subidos. "
+
+
+def error_region(region):
+    if validate_region(region):
+        return ""
+    return "Error en la region escogida. "
+
+
+def error_comuna(comuna):
+    if validate_comuna(comuna):
+        return ""
+    return "Error en la comuna escogida. "
+
+
+def error_name(name):
+    if validate_name(name):
+        return ""
+    return "Error en el nombre entregado. "
+
+
+def error_email(email):
+    if validate_email(email):
+        return ""
+    return "Error en el email entregado. "
+
+
+def error_phone(phone):
+    if validate_phone_number(phone):
+        return ""
+    return "Error en el número celular entregado. "
+
+
+def error_inputs(ptype, products, images, region, comuna, name, email, phone_number):
+    error = error_type(ptype) + error_products(products) + error_images(images) + error_region(region) + error_comuna(comuna) + error_name(name) + error_email(email) + error_phone(phone_number)
+    return error
