@@ -14,8 +14,7 @@ app = Flask(__name__)
 app.secret_key = "secret_key"
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-limit_left = 0
-limit_right = 5
+
 
 
 # --- Indice ---
@@ -34,7 +33,7 @@ def index():
             return redirect(url_for("agregarPedido"))
         
         elif button == "Ver Productos":
-            return redirect(url_for("verProductos"))
+            return redirect(url_for("verProductos", pagina=0))
         
         elif button == "Ver Pedidos":
             return redirect(url_for("verPedidos"))
@@ -132,29 +131,60 @@ def agregarProducto():
 
 # --- Ver Productos ---
 
-@app.route("/ver-productos", methods=["GET", "POST"])
-def verProductos():
-    productos = []
-    for product in db.get_producto(limit_left, limit_right):
-        product_id, tipo, _, comuna_id, _, _, _ = product
-        name = db.get_name_by_id_product(product_id)[0]
-        region = db.get_region_by_id_comuna(comuna_id)[0]
-        comuna = db.get_comuna_by_id(comuna_id)[0]
-        fotos = db.get_foto_by_id_product(product_id)[0]
+@app.route("/ver-productos/<pagina>", methods=["GET", "POST"])
+def verProductos(pagina):
+    page = int(pagina)
+    limit_left = page * 5
+    limit_right = (page * 5) + 5
+    notfirst = False
+    notlast = False
 
-        p_img = f"uploads/{fotos}_size_120_120"
-        _extension = os.path.splitext(fotos)[1].lower()
-        p_img += f"{_extension}"
+    if page != 0:
+        notfirst = True
 
-        productos.append({
-            "tipo": tipo,
-            "name": name,
-            "region": region,
-            "comuna": comuna,
-            "fotos": url_for('static', filename=p_img)
-        })
+    elementos = len(db.get_all_productos())
+    last = elementos // 5 if elementos % 5 != 0 else (elementos // 5) - 1
+    if (page != last) and (elementos % 5 != 0):
+        notlast = True
 
-    return render_template("ver-productos.html", productos=productos)
+    if request.method == "POST":
+        index = request.form.get("back_to_index")
+        anterior = request.form.get("before")
+        siguiente = request.form.get("after")
+
+        if index:
+            return redirect(url_for("index"))
+        
+        if anterior:
+            page -= 1
+            return redirect(url_for("verProductos", pagina=page))
+
+        if siguiente:
+            page += 1
+            return redirect(url_for("verProductos", pagina=page))
+
+    elif request.method == "GET":
+        productos = []
+        for product in db.get_producto(limit_left, limit_right):
+            product_id, tipo, _, comuna_id, _, _, _ = product
+            name = db.get_name_by_id_product(product_id)[0]
+            region = db.get_region_by_id_comuna(comuna_id)[0]
+            comuna = db.get_comuna_by_id(comuna_id)[0]
+            fotos = db.get_foto_by_id_product(product_id)[0]
+
+            p_img = f"uploads/{fotos}_size_120_120"
+            _extension = os.path.splitext(fotos)[1].lower()
+            p_img += f"{_extension}"
+
+            productos.append({
+                "tipo": tipo,
+                "name": name,
+                "region": region,
+                "comuna": comuna,
+                "fotos": url_for('static', filename=p_img)
+            })
+
+        return render_template("ver-productos.html", productos=productos, notfirst=notfirst, notlast=notlast)
     
 @app.route("/agregar-pedido", methods=["GET", "POST"])
 def agregarPedido():

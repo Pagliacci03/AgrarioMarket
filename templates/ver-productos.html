@@ -10,44 +10,58 @@
         />
     </head>
     <body>
-        <table>
-            <thead>
-                <tr>
-                    <td>
-                        <b>Tipo</b>
-                    </td>
-                    <td>
-                        <b>Producto(s)</b>
-                    </td>
-                    <td>
-                        <b>Región</b>
-                    </td>
-                    <td>
-                        <b>Comuna</b>
-                    </td>
-                    <td>
-                        <b>Fotos</b>
-                    </td>
-                </tr>
-            </thead>
-            <tbody>
-                {% if productos %}
-                    {% for producto in productos %}
-                        <tr>
-                            <td>{{ producto.tipo }}</td>
-                            <td>{{ producto.name }}</td>
-                            <td>{{ producto.region }}</td>
-                            <td>{{ producto.comuna }}</td>
-                            <td><img src="{{ producto.fotos }}" alt="prod_1"></td>
-                        </tr>
-                    {% endfor %}
-                {% endif %}
-                <tr>
-                    <td colspan="5" class="button_container">
-                        <button  type="button" id="index">Indice</button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+        <form action="" method="post">
+            <table>
+                <tbody>
+                    <tr>
+                        <td colspan="5">
+                            <input type="submit" id="index" class="button" name="back_to_index" value="Volver al indice">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <b>Tipo</b>
+                        </td>
+                        <td>
+                            <b>Producto(s)</b>
+                        </td>
+                        <td>
+                            <b>Región</b>
+                        </td>
+                        <td>
+                            <b>Comuna</b>
+                        </td>
+                        <td>
+                            <b>Fotos</b>
+                        </td>
+                    </tr>
+                    {% if productos %}
+                        {% for producto in productos %}
+                            <tr>
+                                <td>{{ producto.tipo }}</td>
+                                <td>{{ producto.name }}</td>
+                                <td>{{ producto.region }}</td>
+                                <td>{{ producto.comuna }}</td>
+                                <td><img src="{{ producto.fotos }}" alt="prod_1"></td>
+                            </tr>
+                        {% endfor %}
+                    {% endif %}
+                    <tr>
+                        <td colspan="2">
+                            {% if notfirst %}
+                                <input type="submit" id="before" class="button" name="before" value="Anterior">
+                            {% endif %}
+                        </td>
+                        <td>
+                        </td>
+                        <td colspan="2">
+                            {% if notlast %}
+                                <input type="submit" id="after" class="button" name="after" value="Siguiente">
+                            {% endif %}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </form>
     </body>
 </html>

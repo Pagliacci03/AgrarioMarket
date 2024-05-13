@@ -27,18 +27,24 @@ tr:nth-child(even) {
     background-color: #59c459;
 }
 
-#index {
+.button {
     border: none;
     color: #000000;
+    background-color: #1f69e7;
     border-radius: 8px;
     font-size: 17px;
     font-weight: bold;
     padding: 2% 5%;
     width: 300px;
     cursor: pointer;
-    background-color: #b80909;
+    margin: 20px;
 }
 
-.button_container {
-    text-align: center;
+#index {
+    font-size: 15px;
+    font-weight: bold;
+    width: 200px;
+    position: absolute;
+    top: 0;
+    right: 0;
 }

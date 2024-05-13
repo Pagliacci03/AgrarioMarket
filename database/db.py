@@ -60,6 +60,15 @@ def get_id_tvf_by_nombre(name):
     id = cursor.fetchall()
     return id
 
+def get_all_productos():
+    sql = "SELECT * FROM producto"
+    conn = get_conn()
+    cursor = conn.cursor()
+    cursor.execute(sql)
+    conn.commit()
+    productos = cursor.fetchall()
+    return productos
+
 def get_producto(left, right):
     sql = "SELECT id, tipo, descripcion, comuna_id, nombre_productor, email_productor, celular_productor FROM producto ORDER BY id DESC LIMIT %s, %s"
     conn = get_conn()
