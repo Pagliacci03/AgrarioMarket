@@ -79,7 +79,10 @@ def agregarProducto():
 
             # no tomar en cuenta al input de tipo file que se agrega después de agregar un archivo al input anterior
             if len(files) >= 2 and len(files) <= 3 and not filetype.guess(files[-1]):
-                files = files[:-1] 
+                if not filetype.guess(files[-2]):
+                    files = files[:-2]
+                else:
+                    files = files[:-1] 
 
             if validate_agregar_producto(product_type, products, description, files, region, comuna, productor_name, productor_email, phone_number):
                 comuna_id = db.get_id_comuna_by_nombre(comuna)
