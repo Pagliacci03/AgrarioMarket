@@ -1,17 +1,23 @@
 /**
- * Redirige hacia la informacicion-producto.
+ * Redirige hacia la información-producto.
  */
-const redirectProduct = () => {
-    window.location.href = "../html/informacion-producto.html";
+const redirect_to_info = (id) => {
+    fetch('/informacion-producto/' + id, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ id: id })
+    })
+    .then(response => {
+        if (response.ok) {
+            window.location.href = '/informacion-producto/' + id;
+        } else {
+            throw new Error('La solicitud no fue exitosa');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        // Manejar el error, si es necesario
+    });
 };
-
-const clickTable_1 = document.getElementById("producto_1");
-const clickTable_2 = document.getElementById("producto_2");
-const clickTable_3 = document.getElementById("producto_3");
-const clickTable_4 = document.getElementById("producto_4");
-const clickTable_5 = document.getElementById("producto_5");
-clickTable_1.addEventListener("click", redirectProduct);
-clickTable_2.addEventListener("click", redirectProduct);
-clickTable_3.addEventListener("click", redirectProduct);
-clickTable_4.addEventListener("click", redirectProduct);
-clickTable_5.addEventListener("click", redirectProduct);

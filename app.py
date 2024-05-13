@@ -33,7 +33,7 @@ def index():
             return redirect(url_for("agregarPedido"))
         
         elif button == "Ver Productos":
-            return redirect(url_for("verProductos"))
+            return redirect(url_for("verProductos", pagina=0))
         
         elif button == "Ver Pedidos":
             return redirect(url_for("verPedidos"))
@@ -100,10 +100,10 @@ def agregarProducto():
                         secure_filename(img.filename).encode("utf-8")
                         ).hexdigest()
                     _extension = filetype.guess(img).extension
-                    img_filename = f"{_filename}_{str(uuid.uuid4())}"
+                    img_filename = f"{_filename}_{str(uuid.uuid4())}.{_extension}"
 
                     # guardar la imagen y sus distintas resoluciones en una carpeta
-                    img_path = os.path.join(app.config["UPLOAD_FOLDER"], img_filename + f".{_extension}")
+                    img_path = os.path.join(app.config["UPLOAD_FOLDER"], img_filename)
                     img.save(img_path)
                     sizes = [(120, 120), (640, 480), (1280, 1024)]
                     for size in sizes:
@@ -112,10 +112,8 @@ def agregarProducto():
                             resized_path = os.path.join(app.config["UPLOAD_FOLDER"], img_filename + f"_size_{size[0]}_{size[1]}.{_extension}")
                             resized_img.save(resized_path)
 
-                            db.create_image(resized_path, img_filename + f"_size_{size[0]}_{size[1]}.{_extension}", product_id)
-
                     # guardar los datos del archivo en la base de datos
-                    db.create_image(img_path, img_filename + f".{_extension}", product_id)
+                    db.create_image(img_path, img_filename, product_id)
 
                 return redirect(url_for("index"))
             
@@ -133,11 +131,78 @@ def agregarProducto():
 
 # --- Ver Productos ---
 
-@app.route("/ver-productos", methods=["GET", "POST"])
-def verProductos():
-    if request.method == "GET":
-        return render_template("ver-productos.html")
-    
+@app.route("/ver-productos/<pagina>", methods=["GET", "POST"])
+def verProductos(pagina):
+    page = int(pagina)
+    limit_left = page * 5
+    show = 5
+    notfirst = False
+    notlast = False
+
+    if page != 0:
+        notfirst = True
+
+    elementos = len(db.get_all_productos())
+    last = elementos // 5 if elementos % 5 != 0 else (elementos // 5) - 1
+    if (page != last):
+        notlast = True
+
+    if request.method == "POST":
+        index = request.form.get("back_to_index")
+        anterior = request.form.get("back")
+        siguiente = request.form.get("next")
+
+        if index:
+            return redirect(url_for("index"))
+        
+        if anterior:
+            page -= 1
+            return redirect(url_for("verProductos", pagina=page))
+
+        if siguiente:
+            page += 1
+            return redirect(url_for("verProductos", pagina=page))
+
+    elif request.method == "GET":
+        productos = []
+        for product in db.get_producto(limit_left, show):
+            product_id, tipo, _, comuna_id, _, _, _ = product
+            names = ""
+            product_names = [row[0] for row in db.get_name_by_id_product(product_id)]
+            for name in product_names:
+                names += name + ", "
+            names = names[:-2]
+            region = db.get_region_by_id_comuna(comuna_id)[0]
+            comuna = db.get_comuna_by_id(comuna_id)[0]
+            urls = []
+            fotos = [row[0] for row in db.get_foto_by_id_product(product_id)]
+            for foto in fotos:
+                p_img = f"uploads/{foto}_size_120_120"
+                _extension = os.path.splitext(foto)[1].lower()
+                p_img += f"{_extension}"
+                urls.append(p_img)
+
+            productos.append({
+                "id": product_id,
+                "tipo": tipo,
+                "name": names,
+                "region": region,
+                "comuna": comuna,
+                "fotos": urls
+            })
+
+        return render_template("ver-productos.html", productos=productos, notfirst=notfirst, notlast=notlast, page=(page+1))
+
+
+
+
+# --- Información Producto ---
+@app.route("/informacion-producto/<producto_id>", methods=["GET", "POST"])
+def informacionProducto(producto_id):
+    return render_template("informacion-producto.html")
+
+
+
 @app.route("/agregar-pedido", methods=["GET", "POST"])
 def agregarPedido():
     if request.method == "GET":
