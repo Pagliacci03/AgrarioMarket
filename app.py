@@ -14,7 +14,8 @@ app = Flask(__name__)
 app.secret_key = "secret_key"
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-
+limit_left = 0
+limit_right = 5
 
 
 # --- Indice ---
@@ -100,10 +101,10 @@ def agregarProducto():
                         secure_filename(img.filename).encode("utf-8")
                         ).hexdigest()
                     _extension = filetype.guess(img).extension
-                    img_filename = f"{_filename}_{str(uuid.uuid4())}"
+                    img_filename = f"{_filename}_{str(uuid.uuid4())}.{_extension}"
 
                     # guardar la imagen y sus distintas resoluciones en una carpeta
-                    img_path = os.path.join(app.config["UPLOAD_FOLDER"], img_filename + f".{_extension}")
+                    img_path = os.path.join(app.config["UPLOAD_FOLDER"], img_filename)
                     img.save(img_path)
                     sizes = [(120, 120), (640, 480), (1280, 1024)]
                     for size in sizes:
@@ -112,10 +113,8 @@ def agregarProducto():
                             resized_path = os.path.join(app.config["UPLOAD_FOLDER"], img_filename + f"_size_{size[0]}_{size[1]}.{_extension}")
                             resized_img.save(resized_path)
 
-                            db.create_image(resized_path, img_filename + f"_size_{size[0]}_{size[1]}.{_extension}", product_id)
-
                     # guardar los datos del archivo en la base de datos
-                    db.create_image(img_path, img_filename + f".{_extension}", product_id)
+                    db.create_image(img_path, img_filename, product_id)
 
                 return redirect(url_for("index"))
             
@@ -135,8 +134,27 @@ def agregarProducto():
 
 @app.route("/ver-productos", methods=["GET", "POST"])
 def verProductos():
-    if request.method == "GET":
-        return render_template("ver-productos.html")
+    productos = []
+    for product in db.get_producto(limit_left, limit_right):
+        product_id, tipo, _, comuna_id, _, _, _ = product
+        name = db.get_name_by_id_product(product_id)[0]
+        region = db.get_region_by_id_comuna(comuna_id)[0]
+        comuna = db.get_comuna_by_id(comuna_id)[0]
+        fotos = db.get_foto_by_id_product(product_id)[0]
+
+        p_img = f"uploads/{fotos}_size_120_120"
+        _extension = os.path.splitext(fotos)[1].lower()
+        p_img += f"{_extension}"
+
+        productos.append({
+            "tipo": tipo,
+            "name": name,
+            "region": region,
+            "comuna": comuna,
+            "fotos": url_for('static', filename=p_img)
+        })
+
+    return render_template("ver-productos.html", productos=productos)
     
 @app.route("/agregar-pedido", methods=["GET", "POST"])
 def agregarPedido():

@@ -60,6 +60,51 @@ def get_id_tvf_by_nombre(name):
     id = cursor.fetchall()
     return id
 
+def get_producto(left, right):
+    sql = "SELECT id, tipo, descripcion, comuna_id, nombre_productor, email_productor, celular_productor FROM producto ORDER BY id DESC LIMIT %s, %s"
+    conn = get_conn()
+    cursor = conn.cursor()
+    cursor.execute(sql, (left, right))
+    conn.commit()
+    productos = cursor.fetchall()
+    return productos
+
+def get_name_by_id_product(id):
+    sql = "SELECT TVF.nombre FROM tipo_verdura_fruta TVF, producto_verdura_fruta PVF WHERE TVF.id=PVF.tipo_verdura_fruta_id AND PVF.producto_id=%s"
+    conn = get_conn()
+    cursor = conn.cursor()
+    cursor.execute(sql, (id,))
+    conn.commit()
+    product_names = cursor.fetchone()
+    return product_names
+
+def get_region_by_id_comuna(id):
+    sql = "SELECT REG.nombre FROM region REG, comuna COM WHERE REG.id = COM.region_id AND COM.id=%s"
+    conn = get_conn()
+    cursor = conn.cursor()
+    cursor.execute(sql, (id,))
+    conn.commit()
+    region = cursor.fetchone()
+    return region
+
+def get_comuna_by_id(id):
+    sql = "SELECT nombre FROM comuna WHERE id=%s"
+    conn = get_conn()
+    cursor = conn.cursor()
+    cursor.execute(sql, (id,))
+    conn.commit()
+    comuna = cursor.fetchone()
+    return comuna
+
+def get_foto_by_id_product(id):
+    sql = "SELECT nombre_archivo FROM foto WHERE producto_id=%s"
+    conn = get_conn()
+    cursor = conn.cursor()
+    cursor.execute(sql, (id,))
+    conn.commit()
+    fotos = cursor.fetchone()
+    return fotos
+
 
 # --- Ver si existe un elemento en la base de datos ---
 

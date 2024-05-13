@@ -3,8 +3,11 @@
     <head>
         <meta charset="utf-8">
         <title>Ver productos</title>
-        <link rel="stylesheet" href="../css/ver-productos.css">
-        <style id="operaUserStyle"></style>
+        <link
+        rel="stylesheet"
+        type="text/css"
+        href="{{ url_for('static', filename='css/ver-productos.css')}}"
+        />
     </head>
     <body>
         <table>
@@ -28,41 +31,17 @@
                 </tr>
             </thead>
             <tbody>
-                <tr id="producto_1">
-                    <td>Fruta</td>
-                    <td>Frutilla</td>
-                    <td>Región del Libertador General Bernardo O'Higgins</td>
-                    <td>Las Cabras</td>
-                    <td><img src="https://images.pexels.com/photos/1788912/pexels-photo-1788912.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" width="120" height="120" alt="prod_1"></td>
-                </tr>
-                <tr id="producto_2">
-                    <td>Fruta</td>
-                    <td>Sandía</td>
-                    <td>Región Metropolitana</td>
-                    <td>Paine</td>
-                    <td><img src="https://images.pexels.com/photos/7284760/pexels-photo-7284760.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" width="120" height="120" alt="prod_2"></td>
-                </tr>
-                <tr id="producto_3">
-                    <td>Fruta</td>
-                    <td>Manzana</td>
-                    <td>Región del Libertador General Bernardo O'Higgins</td>
-                    <td>Santa Cruz</td>
-                    <td><img src="https://images.pexels.com/photos/3746517/pexels-photo-3746517.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" width="120" height="120" alt="prod_3"></td>
-                </tr>
-                <tr id="producto_4">
-                    <td>Verdura (Hortaliza)</td>
-                    <td>Cebolla</td>
-                    <td>Región de Coquimbo</td>
-                    <td>Ovalle</td>
-                    <td><img src="https://images.pexels.com/photos/144206/pexels-photo-144206.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" width="120" height="120" alt="prod_4"></td>
-                </tr>
-                <tr id="producto_5">
-                    <td>Verdura (Hortaliza)</td>
-                    <td>Papa</td>
-                    <td>Región de los Lagos</td>
-                    <td>Ancud</td>
-                    <td><img src="https://images.pexels.com/photos/144248/potatoes-vegetables-erdfrucht-bio-144248.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" width="120" height="120" alt="prod_5"></td>
-                </tr>
+                {% if productos %}
+                    {% for producto in productos %}
+                        <tr>
+                            <td>{{ producto.tipo }}</td>
+                            <td>{{ producto.name }}</td>
+                            <td>{{ producto.region }}</td>
+                            <td>{{ producto.comuna }}</td>
+                            <td><img src="{{ producto.fotos }}" alt="prod_1"></td>
+                        </tr>
+                    {% endfor %}
+                {% endif %}
                 <tr>
                     <td colspan="5" class="button_container">
                         <button  type="button" id="index">Indice</button>
@@ -70,7 +49,5 @@
                 </tr>
             </tbody>
         </table>
-        <script src="../js/ver-productos.js"></script>
-        <script src="../js/backToIndex.js"></script>
     </body>
 </html>
