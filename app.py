@@ -197,9 +197,53 @@ def verProductos(pagina):
 
 
 # --- Información Producto ---
-@app.route("/informacion-producto/<producto_id>", methods=["GET", "POST"])
-def informacionProducto(producto_id):
-    return render_template("informacion-producto.html")
+@app.route("/informacion-producto/<producto_id>/<width>/<height>", methods=["GET", "POST"])
+def informacionProducto(producto_id, width, height):
+    if request.method == "POST":
+        index = request.form.get("index")
+        if index:
+            return redirect(url_for("index"))
+        
+    _, product_type, description, comuna_id, productor, email, phone_number = db.get_producto_by_id(producto_id)[0]
+    names = ""
+    product_names = [row[0] for row in db.get_name_by_id_product(producto_id)]
+    for name in product_names:
+        names += name + ", "
+    names = names[:-2]
+    urls = []
+    fotos = [row[0] for row in db.get_foto_by_id_product(producto_id)]
+    for foto in fotos:
+        p_img = f"uploads/{foto}_size_{width}_{height}"
+        _extension = os.path.splitext(foto)[1].lower()
+        p_img += f"{_extension}"
+        urls.append(p_img)
+
+    comuna = db.get_comuna_by_id(comuna_id)[0]
+    region = db.get_region_by_id_comuna(comuna_id)[0]
+
+    if not description:
+        description = ""
+
+    if not phone_number:
+        phone_number = ""
+    
+        
+    info = {
+        "id": producto_id,
+        "tipo": product_type,
+        "productos": names,
+        "descripcion": description,
+        "fotos": urls,
+        "region": region,
+        "comuna": comuna,
+        "productor": productor,
+        "email": email,
+        "celular": phone_number,
+        "width": width,
+        "height": height
+    }
+
+    return render_template("informacion-producto.html", info=info)
 
 
 

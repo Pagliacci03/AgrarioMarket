@@ -3,59 +3,69 @@
     <head>
         <meta charset="utf-8">
         <title>Información del Producto</title>
-        <link rel="stylesheet" href="../css/informacion-producto.css">
-        <style id="operaUserStyle"></style>
+        <link
+        rel="stylesheet"
+        type="text/css"
+        href="{{ url_for('static', filename='css/informacion-producto.css')}}"
+        />
     </head>
     <body>
         <table>
-            <thead><tr><td colspan="2"><b>Información del Producto</b></td></tr></thead>
+            <thead>
+                <tr>
+                    <td colspan="2" class="button_container">
+                        <form method="post">
+                            <input  type="submit" id="index" name="index" value="Volver al indice">
+                        </form>
+                    </td>
+                </tr>
+            </thead>
             <tbody>
+                <tr><td colspan="2"><b>Información del Producto</b></td></tr>
                 <tr>
                     <td>
-                        <b>Tipo del producto</b>
+                        <b>Tipo de los productos</b>
                     </td>
-                    <td>Fruta</td>
+                    <td>{{ info.tipo }}</td>
                 </tr>
                 <tr>
-                    <td><b>Producto</b></td>
-                    <td>Sandía</td>
+                    <td><b>Producto(s)</b></td>
+                    <td>{{ info.productos }}</td>
                 </tr>
                 <tr>
                     <td><b>Descripción</b></td>
-                    <td><p>Fruta popular (Citrullus lanatus thunb), destacada y apreciada en días veraniegos por su frescura, gran dulzor y calidad nutritiva. De color verde característico, puede llegar a pesar más de 25 kilos y se compone principalmente de azúcar y agua.</p></td>
+                    <td><p>{{ info.descripcion }}</p></td>
                 </tr>
                 <tr>
                     <td><b>Foto(s)</b></td>
-                    <td><img src="https://images.pexels.com/photos/12746878/pexels-photo-12746878.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" width="640" height="480" id="imagen_info" alt="info_image"></td>
+                    <td>
+                        {% for foto in info.fotos %}
+                            <img src="{{ url_for('static', filename=foto) }}" alt="prod_1" onclick="resize('{{ info.id }}', '{{ info.width }}', '{{ info.height }}')">
+                        {% endfor %}
+                    </td>
                 </tr>
                 <tr>
                     <td><b>Región</b></td>
-                    <td>Región Metropolitana</td>
+                    <td>{{ info.region }}</td>
                 </tr>
                 <tr>
                     <td><b>Comuna</b></td>
-                    <td>Paine</td>
+                    <td>{{ info.comuna }}</td>
                 </tr>
                 <tr>
                     <td><b>Nombre del productor</b></td>
-                    <td>Carlos Vera</td>
+                    <td>{{ info.productor }}</td>
                 </tr>
                 <tr>
                     <td><b>Email del productor</b></td>
-                    <td>crlsVera@gmail.com</td>
+                    <td>{{ info.email }}</td>
                 </tr>
                 <tr>
                     <td><b>Número celular del productor</b></td>
-                    <td>+569 98344398</td>
-                </tr>
-                <tr>
-                    <td colspan="2" class="button_container">
-                        <button  type="button" id="index">Indice</button>
-                    </td>
+                    <td>{{ info.celular }}</td>
                 </tr>
             </tbody>
         </table>
-        <script src="../js/backToIndex.js"></script>
-        <script src="../js/informacion-producto.js"></script>
+        <script src="{{ url_for('static', filename='js/informacion-producto.js') }}"></script>
     </body>
 </html>
