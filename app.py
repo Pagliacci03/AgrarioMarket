@@ -46,6 +46,13 @@ def index():
 
 # --- Agregar producto ---
 
+@app.route("/productos")
+def productos():
+    tipo = request.args.get('tipo')
+    productos = db.get_productos_by_tipo(tipo)
+
+    return jsonify(productos)
+
 @app.route("/comunas")
 def comunas():
     region = request.args.get('region')
@@ -197,6 +204,7 @@ def verProductos(pagina):
 
 
 # --- Información Producto ---
+
 @app.route("/informacion-producto/<producto_id>/<width>/<height>", methods=["GET", "POST"])
 def informacionProducto(producto_id, width, height):
     if request.method == "POST":
@@ -247,15 +255,26 @@ def informacionProducto(producto_id, width, height):
 
 
 
+
+# --- Agregar Pedido ---
+
 @app.route("/agregar-pedido", methods=["GET", "POST"])
 def agregarPedido():
     if request.method == "GET":
         return render_template("agregar-pedido.html")
-    
+
+
+
+
+# --- Ver Pedidos ---
+
 @app.route("/ver-pedidos", methods=["GET", "POST"])
 def verPedidos():
     if request.method == "GET":
         return render_template("ver-pedidos.html")
-    
+
+
+
+
 if __name__ == '__main__':
    app.run(debug = True)
