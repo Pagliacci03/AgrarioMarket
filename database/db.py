@@ -123,6 +123,19 @@ def get_producto_by_id(id):
     info = cursor.fetchall()
     return info
 
+def get_productos_by_tipo(tipo):
+    sql = ""
+    if tipo == 'fruta':
+        sql = "SELECT nombre FROM tipo_verdura_fruta WHERE id BETWEEN 1 AND 37;"
+    if tipo == 'verdura':
+        sql = "SELECT nombre FROM tipo_verdura_fruta WHERE id BETWEEN 38 AND 64;"
+    conn = get_conn()
+    cursor = conn.cursor()
+    cursor.execute(sql)
+    conn.commit()
+    info = cursor.fetchall()
+    return info
+
 
 # --- Ver si existe un elemento en la base de datos ---
 

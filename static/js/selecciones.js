@@ -15,101 +15,35 @@ let products = document.getElementById("products");
 
 
 /**
- * @description Diccionario que contiene el tipo de producto seguido de una lista de los productos disponibles para ese tipo.
- * @type {Map}
- */
-const dicc_products = new Map([["fruta", [
-    "Arándano", 
-    "Frambuesa", 
-    "Frutilla", 
-    "Grosella", 
-    "Mora", 
-    "Limón", 
-    "Mandarina", 
-    "Naranja", 
-    "Pomelo", 
-    "Melón", 
-    "Sandía", 
-    "Palta", 
-    "Chirimoya", 
-    "Coco", 
-    "Dátil", 
-    "Kiwi", 
-    "Mango", 
-    "Papaya", 
-    "Piña", 
-    "Plátano", 
-    "Damasco", 
-    "Cereza", 
-    "Ciruela", 
-    "Higo", 
-    "Kaki", 
-    "Manzana", 
-    "Durazno", 
-    "Nectarin", 
-    "Níspero", 
-    "Pera", 
-    "Uva", 
-    "Almendra", 
-    "Avellana", 
-    "Maní", 
-    "Castaña", 
-    "Nuez", 
-    "Pistacho"
-]], ["verdura", [
-    "Brócoli", 
-    "Repollo", 
-    "Coliflor", 
-    "Rábano", 
-    "Alcachofa", 
-    "Lechuga", 
-    "Zapallo", 
-    "Pepino", 
-    "Haba", 
-    "Maíz", 
-    "Champiñon", 
-    "Acelga", 
-    "Apio", 
-    "Espinaca", 
-    "Perejil", 
-    "Ajo", 
-    "Cebolla", 
-    "Espárrago", 
-    "Puerro", 
-    "Remolacha", 
-    "Berenjena", 
-    "Papa", 
-    "Pimiento", 
-    "Tomate", 
-    "Zanahoria"
-]]]);
-
-
-/**
  * Función que genera nuevas opciones para el menu de selección de los productos según el tipo de producto escogido.
  */
 const change_product_select = () => {
-    let product_type = type_selected.value;
-    let list_of_products = dicc_products.get(product_type);
+    let product_type = type_selected.options[type_selected.selectedIndex].value;
 
-    products.innerHTML = ""; // Limpiar el contenido anterior
+    if (product_type) {
+        fetch('/productos?tipo=' + product_type)
+            .then(response => response.json())
+            .then( data => {
+                products.innerHTML = ""; // Limpiar el contenido anterior
 
-    list_of_products.forEach(product => {
-        let checkbox = document.createElement("input");
-        checkbox.type = "checkbox";
-        checkbox.name = "product_checkbox";
-        checkbox.class = "checkboxes";
-        checkbox.value = product;
-
-        let label = document.createElement("label");
-        label.textContent = product;
-
-        const br = document.createElement("br");
-
-        products.appendChild(checkbox);
-        products.appendChild(label);
-        products.appendChild(br);
-    });
+                data.forEach(product => {
+                    let checkbox = document.createElement("input");
+                    checkbox.type = "checkbox";
+                    checkbox.name = "product_checkbox";
+                    checkbox.class = "checkboxes";
+                    checkbox.value = product;
+            
+                    let label = document.createElement("label");
+                    label.textContent = product;
+            
+                    const br = document.createElement("br");
+            
+                    products.appendChild(checkbox);
+                    products.appendChild(label);
+                    products.appendChild(br);
+                });
+            });
+    }
 };
 
 
