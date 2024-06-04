@@ -1,3 +1,6 @@
+/**
+ * Crea un gráfico de torta sin datos de momento
+ */
 Highcharts.chart('container_2', {
     chart: {
         type: 'pie',
@@ -22,10 +25,14 @@ Highcharts.chart('container_2', {
 
 
 
-
+/**
+ * Enlaza los datos del gráfico anterior con el total de pedidos por comuna 
+ * enviados desde una API en el servidor
+ */
 fetch("http://localhost:5000/get-stats-data-pedidos")
   .then((response) => response.json())
   .then((data) => {
+    // Parsear datos entregados por la API
     let parsedData = data.map((item) => {
         return [
           item.name,
@@ -33,12 +40,12 @@ fetch("http://localhost:5000/get-stats-data-pedidos")
         ];
       });
 
-    // Get the chart by ID
+    // Obtener el gráfico por el id
     const chart = Highcharts.charts.find(
       (chart) => chart && chart.renderTo.id === "container_2"
     );
 
-    // Update the chart with new data
+    // Actualizar los datos del gráfico
     chart.update({
       series: [
         {
