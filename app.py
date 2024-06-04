@@ -54,6 +54,12 @@ def index():
         elif button == "Ver Pedidos":
             return redirect(url_for("verPedidos", pagina=0))
         
+        elif button == "Estadisticas Productos":
+            return redirect(url_for("statsProductos"))
+        
+        elif button == "Estadisticas Pedidos":
+            return redirect(url_for("statsPedidos"))
+        
         else:
             return render_template("index.html")
         
@@ -407,6 +413,7 @@ def informacionPedido(pedido_id):
 
 
 # --- Stats Productos ---
+
 @app.route("/stats-productos", methods=["GET"])
 def statsProductos():
     return render_template("stats-productos.html")
@@ -419,6 +426,31 @@ def get_stats_data_productos():
     data = []
     for producto in db.get_count_productos():
         nombre, cantidad = producto
+        data.append({
+            "name": nombre,
+            "count": cantidad
+        })
+
+    return jsonify(data)
+
+
+
+
+
+# --- Stats Pedidos ---
+
+@app.route("/stats-pedidos", methods=["GET"])
+def statsPedidos():
+    return render_template("stats-pedidos.html")
+
+
+@app.route("/get-stats-data-pedidos", methods=["GET"])
+@cross_origin(origin="localhost", supports_credentials=True)
+def get_stats_data_pedidos():
+
+    data = []
+    for comuna in db.get_count_pedidos():
+        nombre, cantidad = comuna
         data.append({
             "name": nombre,
             "count": cantidad

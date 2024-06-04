@@ -190,6 +190,15 @@ def get_count_productos():
     info = cursor.fetchall()
     return info
 
+def get_count_pedidos():
+    sql = "SELECT CO.nombre, count(*) FROM pedido PE, comuna CO WHERE PE.comuna_id=CO.id GROUP BY PE.comuna_id;"
+    conn = get_conn()
+    cursor = conn.cursor()
+    cursor.execute(sql)
+    conn.commit()
+    info = cursor.fetchall()
+    return info
+
 # --- Ver si existe un elemento en la base de datos ---
 
 def is_product(product):
