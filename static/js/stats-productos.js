@@ -1,4 +1,4 @@
-Highcharts.chart('container', {
+Highcharts.chart('container_1', {
     chart: {
         type: 'pie',
         backgroundColor: 'lightgreen'
@@ -35,7 +35,7 @@ fetch("http://localhost:5000/get-stats-data-productos")
 
     // Get the chart by ID
     const chart = Highcharts.charts.find(
-      (chart) => chart && chart.renderTo.id === "container"
+      (chart) => chart && chart.renderTo.id === "container_1"
     );
 
     // Update the chart with new data

@@ -35,3 +35,43 @@ body {
     cursor: pointer;
     margin: 10px;
 }
+
+/* Modal */
+.modal_success {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal_content {
+    border: none;
+    background-color: #59c459;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 30%;
+    text-align: center;
+    border-radius: 8px;
+}
+
+.modal_button {
+    border: none;
+    color: #000000;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: bold;
+    padding: 2% 5%;
+    width: 300px;
+    cursor: pointer;
+    margin: 10px;
+}
+
+#aceptar {
+    background-color: #1f69e7;
+}

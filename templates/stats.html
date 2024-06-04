@@ -2,7 +2,7 @@
 <html lang="es">
     <head>
         <meta charset="utf-8">
-        <title>Estadísticas de los productos</title>
+        <title>Estadísticas</title>
         <link
         rel="stylesheet"
         type="text/css"
@@ -12,10 +12,16 @@
     <body>
         <div class="stats-container">
             <figure class="highcharts-figure">
-                <div id="container"></div>
+                <div id="container_1"></div>
+            </figure>
+        </div>
+        <div class="stats-container">
+            <figure class="highcharts-figure">
+                <div id="container_2"></div>
             </figure>
         </div>
         <script src="https://code.highcharts.com/highcharts.js"></script>
         <script src="{{ url_for('static', filename='js/stats-productos.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/stats-pedidos.js') }}"></script>
     </body>
 </html>

@@ -54,11 +54,8 @@ def index():
         elif button == "Ver Pedidos":
             return redirect(url_for("verPedidos", pagina=0))
         
-        elif button == "Estadisticas Productos":
-            return redirect(url_for("statsProductos"))
-        
-        elif button == "Estadisticas Pedidos":
-            return redirect(url_for("statsPedidos"))
+        elif button == "Estadisticas":
+            return redirect(url_for("stats"))
         
         else:
             return render_template("index.html")
@@ -412,11 +409,11 @@ def informacionPedido(pedido_id):
 
 
 
-# --- Stats Productos ---
+# --- Stats ---
 
-@app.route("/stats-productos", methods=["GET"])
-def statsProductos():
-    return render_template("stats-productos.html")
+@app.route("/stats", methods=["GET"])
+def stats():
+    return render_template("stats.html")
 
 
 @app.route("/get-stats-data-productos", methods=["GET"])
@@ -432,16 +429,6 @@ def get_stats_data_productos():
         })
 
     return jsonify(data)
-
-
-
-
-
-# --- Stats Pedidos ---
-
-@app.route("/stats-pedidos", methods=["GET"])
-def statsPedidos():
-    return render_template("stats-pedidos.html")
 
 
 @app.route("/get-stats-data-pedidos", methods=["GET"])
