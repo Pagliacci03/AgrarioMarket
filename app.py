@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, redirect, url_for, jsonify
+from flask import Flask, request, render_template, redirect, url_for, jsonify, session
 from flask_cors import cross_origin
 from database import db
 from utils.validations import validate_agregar_producto, error_inputs_productos, validate_agregar_pedido, error_inputs_pedidos
@@ -37,6 +37,7 @@ def comunas():
 
 @app.route("/", methods=["GET", "POST"])
 def index():
+    session['allow_success'] = False
     if request.method == "GET":
         return render_template("index.html")
 
@@ -67,6 +68,7 @@ def index():
 
 @app.route("/agregar-producto", methods=["GET", "POST"])
 def agregarProducto():
+    session['allow_success'] = False
 
     regiones = []
     for name in db.get_regiones():
@@ -125,7 +127,8 @@ def agregarProducto():
                     # guardar los datos del archivo en la base de datos
                     db.create_image(img_path, img_filename, product_id)
 
-                return redirect(url_for("index"))
+                session['allow_success'] = True
+                return redirect(url_for("success"))
             
             else:
                 error = error_inputs_productos(product_type, products, files, region, comuna, productor_name, productor_email, phone_number)
@@ -143,6 +146,8 @@ def agregarProducto():
 
 @app.route("/ver-productos/<pagina>", methods=["GET", "POST"])
 def verProductos(pagina):
+    session['allow_success'] = False
+
     page = int(pagina)
     limit_left = page * 5
     show = 5
@@ -210,6 +215,7 @@ def verProductos(pagina):
 
 @app.route("/informacion-producto/<producto_id>/<width>/<height>", methods=["GET", "POST"])
 def informacionProducto(producto_id, width, height):
+    session['allow_success'] = False
     if request.method == "POST":
         index = request.form.get("index")
         if index:
@@ -263,6 +269,7 @@ def informacionProducto(producto_id, width, height):
 
 @app.route("/agregar-pedido", methods=["GET", "POST"])
 def agregarPedido():
+    session['allow_success'] = False
     
     regiones = []
     for name in db.get_regiones():
@@ -291,7 +298,8 @@ def agregarPedido():
                     name_product_id = db.get_id_tvf_by_nombre(product)
                     db.create_pedidovf(name_product_id, pedido_id)
 
-                return redirect(url_for("index"))
+                session['allow_success'] = True
+                return redirect(url_for("success"))
             
             else:
                 error = error_inputs_pedidos(product_type, products, region, comuna, productor_name, productor_email, phone_number)
@@ -309,6 +317,8 @@ def agregarPedido():
 
 @app.route("/ver-pedidos/<pagina>", methods=["GET", "POST"])
 def verPedidos(pagina):
+    session['allow_success'] = False
+
     page = int(pagina)
     limit_left = page * 5
     show = 5
@@ -370,6 +380,8 @@ def verPedidos(pagina):
 
 @app.route("/informacion-pedido/<pedido_id>", methods=["GET", "POST"])
 def informacionPedido(pedido_id):
+    session['allow_success'] = False
+
     if request.method == "POST":
         index = request.form.get("index")
         if index:
@@ -413,6 +425,7 @@ def informacionPedido(pedido_id):
 
 @app.route("/stats", methods=["GET"])
 def stats():
+    session['allow_success'] = False
     return render_template("stats.html")
 
 
@@ -444,6 +457,26 @@ def get_stats_data_pedidos():
         })
 
     return jsonify(data)
+
+
+
+
+
+# --- Agregados con exito ---
+
+@app.route("/success", methods=["GET", "POST"])
+def success():
+    if not session.get('allow_success'):
+        # Si la sesión no permite el acceso, redirige a la página de inicio
+        return redirect(url_for('index'))
+
+    if request.method == "POST":
+        return redirect(url_for("index"))
+    
+    elif request.method == "GET":
+        return render_template("success.html")
+
+
 
 
 

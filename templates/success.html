@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="utf-8">
+        <title>Indice</title>
+        <link
+        rel="stylesheet"
+        type="text/css"
+        href="{{ url_for('static', filename='css/index.css')}}"
+        />
+        <script src="https://kit.fontawesome.com/c4254e24a8.js" crossorigin="anonymous"></script>
+    </head>
+    <body>
+        <form class="botones" id="success_form" action="/" method="post">
+            <dialog id="modal_success" class="modal_success">
+                <div class="modal_content">
+                    <p>Su operación fue realizada con éxito</p>
+                    <input type="submit" id="aceptar" class="modal_button" name="aceptar" value="Volver a la página principal">
+                </div>
+            </dialog>
+        </form>
+        <script>
+            const modal = document.getElementById("modal_success");
+            // Abrir el modal para que sea visible (si no está visible por defecto)
+            modal.style.display = "block";
+        </script>
+    </body>
+</html>
