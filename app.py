@@ -362,6 +362,47 @@ def verPedidos(pagina):
 
 
 
+# --- Información Pedido ---
+
+@app.route("/informacion-pedido/<pedido_id>", methods=["GET", "POST"])
+def informacionPedido(pedido_id):
+    if request.method == "POST":
+        index = request.form.get("index")
+        if index:
+            return redirect(url_for("index"))
+        
+    _, product_type, description, comuna_id, comprador, email, phone_number = db.get_pedido_by_id(pedido_id)
+    names = ""
+    product_names = [row[0] for row in db.get_name_by_id_pedido(pedido_id)]
+    for name in product_names:
+        names += name + ", "
+    names = names[:-2]
+    comuna = db.get_comuna_by_id(comuna_id)[0]
+    region = db.get_region_by_id_comuna(comuna_id)[0]
+
+    if not description:
+        description = ""
+
+    if not phone_number:
+        phone_number = ""
+    
+        
+    info = {
+        "id": pedido_id,
+        "tipo": product_type,
+        "productos": names,
+        "descripcion": description,
+        "region": region,
+        "comuna": comuna,
+        "comprador": comprador,
+        "email": email,
+        "celular": phone_number,
+    }
+
+    return render_template("informacion-pedido.html", info=info)
+
+
+
 
 if __name__ == '__main__':
    app.run(debug = True)

@@ -172,6 +172,15 @@ def get_comprador_by_id_pedido(id):
     comprador = cursor.fetchone()
     return comprador
 
+def get_pedido_by_id(id):
+    sql = "SELECT * FROM pedido WHERE id=%s"
+    conn = get_conn()
+    cursor = conn.cursor()
+    cursor.execute(sql, (id,))
+    conn.commit()
+    info = cursor.fetchone()
+    return info
+
 # --- Ver si existe un elemento en la base de datos ---
 
 def is_product(product):
