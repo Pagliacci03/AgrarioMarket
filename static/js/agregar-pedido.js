@@ -13,38 +13,38 @@ const modal = document.getElementById("modal_order");
 const handleForm = () => {
     console.log("Validating form...");
   
-    const productType_select = document.getElementById("product_type");
-    const products_select = document.getElementById("products");
-    const region_select = document.getElementById("region");
-    const comuna_select = document.getElementById("comunas");
-    const name_input = document.getElementById("name");
-    const email_input = document.getElementById("email");
-    const phone_number_input = document.getElementById("phone");
+    const product_type = document.getElementById("type");
+    const products = document.getElementById("products");
+    const region = document.getElementById("region");
+    const comuna = document.getElementById("comunas");
+    const name = document.getElementById("name");
+    const email = document.getElementById("email");
+    const phone_number = document.getElementById("phone");
 
 
     init_var_for_errors();
 
     // Errores posibles
     // El cliente no selecciona un tipo de producto.
-    handleError(validateRequiredSelects, productType_select.value, "Por favor, seleccione el tipo de producto.\n", productType_select);
+    handleError(validateRequiredSelects, product_type.value, "Por favor, seleccione el tipo de producto.\n", product_type);
 
     // El cliente selecciona más de 5 o ningún producto.
-    handleError(validateProducts, products_select, "Por favor, seleccione de entre 1 a 5 productos.\n", products_select);
+    handleError(validateProducts, products, "Por favor, seleccione de entre 1 a 5 productos.\n", products);
 
     // El cliente no selecciona una región.
-    handleError(validateRequiredSelects, region_select.value, "Por favor, seleccione la región del pedido.\n", region_select);
+    handleError(validateRequiredSelects, region.value, "Por favor, seleccione la región del pedido.\n", region);
 
     // El cliente no selecciona una comuna.
-    handleError(validateRequiredSelects, comuna_select.value, "Por favor, seleccione la comuna del pedido.\n", comuna_select);
+    handleError(validateRequiredSelects, comuna.value, "Por favor, seleccione la comuna del pedido.\n", comuna);
 
     // El cliente escribe un nombre con menos de 3 caracteres o más de 80.
-    handleError(validateName, name_input.value, "Por favor, escriba un nombre que contenga entre 3 a 80 caracteres.\n", name_input);
+    handleError(validateName, name.value, "Por favor, escriba un nombre que contenga entre 3 a 80 caracteres.\n", name);
 
     // El cliente escribe un email sin el formato adecuado.
-    handleError(validateEmail, email_input.value, "Por favor, escriba una dirección de correo válida.\n", email_input);
+    handleError(validateEmail, email.value, "Por favor, escriba una dirección de correo válida.\n", email);
 
     // El cliente escribe un número de celular con más o menos de 8 números.
-    handleError(validatePhoneNumber, phone_number_input.value, "Por favor, escriba un número de teléfono válido.\n", phone_number_input);
+    handleError(validatePhoneNumber, phone_number.value, "Por favor, escriba un número de teléfono válido.\n", phone_number);
 
 
     // Alertar al usuario de sus errores o llevarlo al cuadro de confirmación.

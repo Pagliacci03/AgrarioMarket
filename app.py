@@ -15,6 +15,21 @@ app.secret_key = "secret_key"
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 
+# --- API's ---
+@app.route("/productos")
+def productos():
+    tipo = request.args.get('tipo')
+    productos = db.get_productos_by_tipo(tipo)
+
+    return jsonify(productos)
+
+@app.route("/comunas")
+def comunas():
+    region = request.args.get('region')
+    comunas = db.get_comunas_by_region(region) 
+
+    # entregamos data necesaria al frontend para determinar las comunas según la región elegida
+    return jsonify(comunas)
 
 
 # --- Indice ---
@@ -45,22 +60,6 @@ def index():
 
 
 # --- Agregar producto ---
-
-@app.route("/productos")
-def productos():
-    tipo = request.args.get('tipo')
-    productos = db.get_productos_by_tipo(tipo)
-
-    return jsonify(productos)
-
-@app.route("/comunas")
-def comunas():
-    region = request.args.get('region')
-    comunas = db.get_comunas_by_region(region) 
-
-    # entregamos data necesaria al frontend para determinar las comunas según la región elegida
-    return jsonify(comunas)
-
 
 @app.route("/agregar-producto", methods=["GET", "POST"])
 def agregarProducto():
