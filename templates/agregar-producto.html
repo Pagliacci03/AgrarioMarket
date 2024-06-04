@@ -6,7 +6,7 @@
         <link
         rel="stylesheet"
         type="text/css"
-        href="{{ url_for('static', filename='css/agregar-producto.css')}}"
+        href="{{ url_for('static', filename='css/agregar.css')}}"
         />
     </head>
     <body>
@@ -111,11 +111,11 @@
                     </tr>
                     <tr class="botones">
                         <td colspan="2">
-                            <input type="button" id="add_products" class="button" value="Agregar Producto(s)">
+                            <input type="button" id="add" class="button" value="Agregar Producto(s)">
                         </td>
                     </tr>
                 </table>
-                <dialog id="modal_product" class="modal_product">
+                <dialog id="modal" class="modal">
                     <div class="modal_content">
                       <p>¿Confirma el registro de este producto?</p>
                       <input type="submit" id="confirmar" class="modal_button" name="confirmar" value="Sí, confirmo">
@@ -126,6 +126,6 @@
         </div>
         <script src="{{ url_for('static', filename='js/selecciones.js') }}"></script>
         <script src="{{ url_for('static', filename='js/validaciones.js') }}"></script>
-        <script src="{{ url_for('static', filename='js/agregar-producto.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/agregar.js') }}"></script>
     </body>
 </html>

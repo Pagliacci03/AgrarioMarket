@@ -4,8 +4,7 @@
  * @description Valor del modal de confirmación.
  * @type {Element}
  */
-const modal = document.getElementById("modal_product");
-
+const modal = document.getElementById("modal");
 
 /**
  * Función que maneja el formulario notificando los errores que ha cometido el usuario 
@@ -16,7 +15,6 @@ const handleForm = () => {
   
     const product_type = document.getElementById("type");
     const products = document.getElementById("products");
-    const files = document.getElementById("files");
     const region = document.getElementById("region");
     const comuna = document.getElementById("comunas");
     const name = document.getElementById("name");
@@ -31,16 +29,20 @@ const handleForm = () => {
     handleError(validateRequiredSelects, product_type.value, "Por favor, seleccione el tipo de producto.\n", product_type);
 
     // El cliente selecciona más de 5 o ningún producto.
-    handleError(validateProducts, products, "Por favor, seleccione de 1 a 5 productos.\n", products);
+    handleError(validateProducts, products, "Por favor, seleccione de entre 1 a 5 productos.\n", products);
 
-    // El cliente selecciona más de 3 o ningún archivo.
-    handleError(validatePictures, files, "Por favor, suba de 1 a 3 archivos.\n", files);
+    // manejo de archivos solo si el formulario cuenta con ello
+    const files = document.getElementById("files");
+    if (files) {
+        // El cliente selecciona más de 3 o ningún archivo.
+        handleError(validatePictures, files, "Por favor, suba de 1 a 3 archivos.\n", files);
+    }
 
     // El cliente no selecciona una región.
-    handleError(validateRequiredSelects, region.value, "Por favor, seleccione la región del producto.\n", region);
+    handleError(validateRequiredSelects, region.value, "Por favor, seleccione la región del pedido.\n", region);
 
     // El cliente no selecciona una comuna.
-    handleError(validateRequiredSelects, comuna.value, "Por favor, seleccione la comuna del producto.\n", comuna);
+    handleError(validateRequiredSelects, comuna.value, "Por favor, seleccione la comuna del pedido.\n", comuna);
 
     // El cliente escribe un nombre con menos de 3 caracteres o más de 80.
     handleError(validateName, name.value, "Por favor, escriba un nombre que contenga entre 3 a 80 caracteres.\n", name);
@@ -96,8 +98,8 @@ cancelarButton.addEventListener("click", cancel);
 // --- Event Listener ---
 
 /**
- * @description Valor del botón agregar-producto.
+ * @description Valor del botón agregar-pedido.
  * @type {Element}
  */
-const add_products = document.getElementById("add_products");
-add_products.addEventListener("click", handleForm);
+const add_button = document.getElementById("add");
+add_button.addEventListener("click", handleForm);

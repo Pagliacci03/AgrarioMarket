@@ -132,5 +132,7 @@ const files_selection = () => {
 // --- Event Listener ---
 
 type_selected.addEventListener("change", change_product_select);
-input_files.addEventListener("change", files_selection);
 region_selected.addEventListener("change", change_comuna_select);
+if (input_files) {
+    input_files.addEventListener("change", files_selection);
+}
