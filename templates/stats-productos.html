@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="utf-8">
+        <title>Estadísticas de los productos</title>
+    </head>
+    <body>
+        <div class="stats-container">
+            <figure class="highcharts-figure">
+                <div id="container"></div>
+            </figure>
+        </div>
+        <script src="https://code.highcharts.com/highcharts.js"></script>
+        <script src="{{ url_for('static', filename='js/stats-productos.js') }}"></script>
+    </body>
+</html>

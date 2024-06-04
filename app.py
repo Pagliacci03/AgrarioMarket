@@ -1,4 +1,5 @@
 from flask import Flask, request, render_template, redirect, url_for, jsonify
+from flask_cors import cross_origin
 from database import db
 from utils.validations import validate_agregar_producto, error_inputs_productos, validate_agregar_pedido, error_inputs_pedidos
 from werkzeug.utils import secure_filename
@@ -401,6 +402,29 @@ def informacionPedido(pedido_id):
 
     return render_template("informacion-pedido.html", info=info)
 
+
+
+
+
+# --- Stats Productos ---
+@app.route("/stats-productos", methods=["GET"])
+def statsProductos():
+    return render_template("stats-productos.html")
+
+
+@app.route("/get-stats-data-productos", methods=["GET"])
+@cross_origin(origin="localhost", supports_credentials=True)
+def get_stats_data_productos():
+
+    data = []
+    for producto in db.get_count_productos():
+        nombre, cantidad = producto
+        data.append({
+            "name": nombre,
+            "count": cantidad
+        })
+
+    return jsonify(data)
 
 
 

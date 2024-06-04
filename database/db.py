@@ -181,6 +181,15 @@ def get_pedido_by_id(id):
     info = cursor.fetchone()
     return info
 
+def get_count_productos():
+    sql = "SELECT TVF.nombre, count(*) FROM producto_verdura_fruta PVF, tipo_verdura_fruta TVF WHERE PVF.tipo_verdura_fruta_id = TVF.id GROUP BY TVF.nombre;"
+    conn = get_conn()
+    cursor = conn.cursor()
+    cursor.execute(sql)
+    conn.commit()
+    info = cursor.fetchall()
+    return info
+
 # --- Ver si existe un elemento en la base de datos ---
 
 def is_product(product):
