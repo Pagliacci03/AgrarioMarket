@@ -136,6 +136,41 @@ def get_productos_by_tipo(tipo):
     info = cursor.fetchall()
     return info
 
+def get_all_pedidos():
+    sql = "SELECT * FROM pedido"
+    conn = get_conn()
+    cursor = conn.cursor()
+    cursor.execute(sql)
+    conn.commit()
+    productos = cursor.fetchall()
+    return productos
+
+def get_pedido(x, y):
+    sql = "SELECT id, tipo, descripcion, comuna_id, nombre_comprador, email_comprador, celular_comprador FROM pedido ORDER BY id DESC LIMIT %s, %s"
+    conn = get_conn()
+    cursor = conn.cursor()
+    cursor.execute(sql, (x, y))
+    conn.commit()
+    productos = cursor.fetchall()
+    return productos
+
+def get_name_by_id_pedido(id):
+    sql = "SELECT TVF.nombre FROM tipo_verdura_fruta TVF, pedido_verdura_fruta PVF WHERE TVF.id=PVF.tipo_verdura_fruta_id AND PVF.pedido_id=%s"
+    conn = get_conn()
+    cursor = conn.cursor()
+    cursor.execute(sql, (id,))
+    conn.commit()
+    product_names = cursor.fetchall()
+    return product_names
+
+def get_comprador_by_id_pedido(id):
+    sql = "SELECT nombre_comprador FROM pedido WHERE id=%s"
+    conn = get_conn()
+    cursor = conn.cursor()
+    cursor.execute(sql, (id,))
+    conn.commit()
+    comprador = cursor.fetchone()
+    return comprador
 
 # --- Ver si existe un elemento en la base de datos ---
 

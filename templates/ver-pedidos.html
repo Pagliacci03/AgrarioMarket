@@ -2,75 +2,68 @@
 <html lang="es">
     <head>
         <meta charset="utf-8">
-        <title>Ver pedidos</title>
-        <link rel="stylesheet" href="../css/ver-pedidos.css">
-        <style id="operaUserStyle"></style>
+        <title>Ver Pedidos</title>
+        <link
+        rel="stylesheet"
+        type="text/css"
+        href="{{ url_for('static', filename='css/ver.css')}}"
+        />
     </head>
     <body>
-        <table>
-            <thead>
-                <tr>
-                    <td>
-                        <b>Tipo</b>
-                    </td>
-                    <td>
-                        <b>Producto(s)</b>
-                    </td>
-                    <td>
-                        <b>Región</b>
-                    </td>
-                    <td>
-                        <b>Comuna</b>
-                    </td>
-                    <td>
-                        <b>Nombre del comprador</b>
-                    </td>
-                </tr>
-            </thead>
-            <tbody>
-                <tr id="pedido_1">
-                    <td>Fruta</td>
-                    <td>Piña</td>
-                    <td>Región de Antofagasta</td>
-                    <td>Calama</td>
-                    <td>Carlos Vera</td>
-                </tr>
-                <tr id="pedido_2">
-                    <td>Fruta</td>
-                    <td>Damasco</td>
-                    <td>Región de Coquimbo</td>
-                    <td>La Serena</td>
-                    <td>Miguel Devia</td>
-                </tr>
-                <tr id="pedido_3">
-                    <td>Fruta</td>
-                    <td>Cereza</td>
-                    <td>Región del Maule</td>
-                    <td>Talca</td>
-                    <td>Natalia Rodríguez</td>
-                </tr>
-                <tr id="pedido_4">
-                    <td>Verdura (Hortaliza)</td>
-                    <td>Tomate</td>
-                    <td>Región de Ñuble</td>
-                    <td>Chillán</td>
-                    <td>Arturo Guerrero</td>
-                </tr>
-                <tr id="pedido_5">
-                    <td>Verdura (Hortaliza)</td>
-                    <td>Zanahoria</td>
-                    <td>Región de la Araucanía</td>
-                    <td>Temuco</td>
-                    <td>José Tapia</td>
-                </tr>
-                <tr>
-                    <td colspan="5" class="button_container">
-                        <button  type="button" id="index">Indice</button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        <script src="../js/ver-pedidos.js"></script>
-        <script src="../js/backToIndex.js"></script>
+        <form action="" method="post">
+            <table>
+                <tbody>
+                    <tr>
+                        <td colspan="5" id="index">
+                            <input type="submit" id="back_to_index" class="button" name="back_to_index" value="Volver al indice">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <b>Tipo</b>
+                        </td>
+                        <td>
+                            <b>Producto(s)</b>
+                        </td>
+                        <td>
+                            <b>Región</b>
+                        </td>
+                        <td>
+                            <b>Comuna</b>
+                        </td>
+                        <td>
+                            <b>Nombre del Comprador</b>
+                        </td>
+                    </tr>
+                    {% if pedidos %}
+                        {% for pedido in pedidos %}
+                            <tr onclick="redirect_to_info('{{ pedido.id }}')">
+                                <td>{{ pedido.tipo }}</td>
+                                <td>{{ pedido.name }}</td>
+                                <td>{{ pedido.region }}</td>
+                                <td>{{ pedido.comuna }}</td>
+                                <td>{{ pedido.comprador }}</td>
+                            </tr>
+                        {% endfor %}
+                    {% endif %}
+                    <tr>
+                        <td colspan="5">
+                            <div>
+                                <p id="page">Página {{ page }}</p>
+                            </div>
+                            <div id="go_to">
+                                {% if notfirst %}
+                                    <input type="submit" id="back" class="button" name="back" value="Anterior">
+                                {% endif %}
+                                {% if notlast %}
+                                    <input type="submit" id="next" class="button" name="next" value="Siguiente">
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </form>
+        <script src="{{ url_for('static', filename='js/ver-pedidos.js') }}"></script>
     </body>
 </html>

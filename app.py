@@ -51,7 +51,7 @@ def index():
             return redirect(url_for("verProductos", pagina=0))
         
         elif button == "Ver Pedidos":
-            return redirect(url_for("verPedidos"))
+            return redirect(url_for("verPedidos", pagina=0))
         
         else:
             return render_template("index.html")
@@ -303,10 +303,62 @@ def agregarPedido():
 
 # --- Ver Pedidos ---
 
-@app.route("/ver-pedidos", methods=["GET", "POST"])
-def verPedidos():
-    if request.method == "GET":
-        return render_template("ver-pedidos.html")
+@app.route("/ver-pedidos/<pagina>", methods=["GET", "POST"])
+def verPedidos(pagina):
+    page = int(pagina)
+    limit_left = page * 5
+    show = 5
+    notfirst = False
+    notlast = False
+
+    if page != 0:
+        notfirst = True
+
+    elementos = len(db.get_all_pedidos())
+    last = elementos // 5 if elementos % 5 != 0 else (elementos // 5) - 1
+    if (page != last):
+        notlast = True
+
+    if request.method == "POST":
+        index = request.form.get("back_to_index")
+        anterior = request.form.get("back")
+        siguiente = request.form.get("next")
+
+        if index:
+            return redirect(url_for("index"))
+        
+        if anterior:
+            page -= 1
+            return redirect(url_for("verPedidos", pagina=page))
+
+        if siguiente:
+            page += 1
+            return redirect(url_for("verPedidos", pagina=page))
+
+    elif request.method == "GET":
+        pedidos = []
+        for pedido in db.get_pedido(limit_left, show):
+            pedido_id, tipo, _, comuna_id, _, _, _ = pedido
+            names = ""
+            product_names = [row[0] for row in db.get_name_by_id_pedido(pedido_id)]
+            for name in product_names:
+                names += name + ", "
+            names = names[:-2]
+            region = db.get_region_by_id_comuna(comuna_id)[0]
+            comuna = db.get_comuna_by_id(comuna_id)[0]
+            comprador = db.get_comprador_by_id_pedido(pedido_id)[0]
+
+            pedidos.append({
+                "id": pedido_id,
+                "tipo": tipo,
+                "name": names,
+                "region": region,
+                "comuna": comuna,
+                "comprador": comprador
+            })
+
+        return render_template("ver-pedidos.html", pedidos=pedidos, notfirst=notfirst, notlast=notlast, page=(page+1))
+
 
 
 

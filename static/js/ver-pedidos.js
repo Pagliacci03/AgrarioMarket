@@ -1,17 +1,23 @@
 /**
- * Redirige hacia la informacicion-pedido.
+ * Redirige hacia la información-pedido.
  */
-const redirectOrder = () => {
-    window.location.href = "../html/informacion-pedido.html";
+const redirect_to_info = (id) => {
+    fetch(`/informacion-pedido/${id}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ id: id })
+    })
+    .then(response => {
+        if (response.ok) {
+            window.location.href = `/informacion-pedido/${id}`;
+        } else {
+            throw new Error('La solicitud no fue exitosa');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        // Manejar el error, si es necesario
+    });
 };
-
-const clickTable_1 = document.getElementById("pedido_1");
-const clickTable_2 = document.getElementById("pedido_2");
-const clickTable_3 = document.getElementById("pedido_3");
-const clickTable_4 = document.getElementById("pedido_4");
-const clickTable_5 = document.getElementById("pedido_5");
-clickTable_1.addEventListener("click", redirectOrder);
-clickTable_2.addEventListener("click", redirectOrder);
-clickTable_3.addEventListener("click", redirectOrder);
-clickTable_4.addEventListener("click", redirectOrder);
-clickTable_5.addEventListener("click", redirectOrder);
