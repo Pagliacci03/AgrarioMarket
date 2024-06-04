@@ -185,11 +185,31 @@ def create_producto(product_type, description, comuna_id, productor_name, produc
     id = cursor.fetchone()
     return id
 
-def create_pvf(product_id, tvf_id):
+def create_pedido(product_type, description, comuna_id, comprador_name, comprador_email, comprador_phone):
+    sql = "INSERT INTO pedido (tipo, descripcion, comuna_id, nombre_comprador, email_comprador, celular_comprador) VALUES (%s,%s,%s,%s,%s,%s)"
+    conn = get_conn()
+    cursor = conn.cursor()
+    cursor.execute(sql, (product_type, description, comuna_id, comprador_name, comprador_email, comprador_phone))
+    conn.commit()
+
+    sql_id = "SELECT LAST_INSERT_ID()"
+    cursor.execute(sql_id)
+    conn.commit()
+    id = cursor.fetchone()
+    return id
+
+def create_productovf(product_id, tvf_id):
     sql = "INSERT INTO producto_verdura_fruta (producto_id, tipo_verdura_fruta_id) VALUES (%s,%s)"
     conn = get_conn()
     cursor = conn.cursor()
     cursor.execute(sql, (product_id, tvf_id))
+    conn.commit()
+
+def create_pedidovf(tvf_id, pedido_id):
+    sql = "INSERT INTO pedido_verdura_fruta (tipo_verdura_fruta_id, pedido_id) VALUES (%s,%s)"
+    conn = get_conn()
+    cursor = conn.cursor()
+    cursor.execute(sql, (tvf_id, pedido_id))
     conn.commit()
 
 def create_image(path, name, product_id):

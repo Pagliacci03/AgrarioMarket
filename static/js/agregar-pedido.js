@@ -75,16 +75,6 @@ const cancelarButton = document.getElementById("cancelar");
 
 
 /**
- * Redirige la página al indice.
- */
-const redirectToIndex = () => {
-    modal.style.display = "none";
-    const modal_success = document.getElementById("modal_success");
-    modal_success.style.display = "block";
-};
-
-
-/**
  * Cancela la confirmación del formulario.
  */
 const cancel = () => {
@@ -92,11 +82,8 @@ const cancel = () => {
 };
 
 
-const aceptarButton = document.getElementById("aceptar");
-
-confirmarButton.addEventListener("click", redirectToIndex);
 cancelarButton.addEventListener("click", cancel);
-aceptarButton.addEventListener("click", ToIndex);
+
 
 
 

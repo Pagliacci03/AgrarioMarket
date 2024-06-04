@@ -82,6 +82,10 @@ def validate_agregar_producto(ptype, products, description, images, region, comu
     return validate_type(ptype) and validate_product(products) and validate_description(description) and validate_img(images) and validate_region(region) and validate_comuna(comuna) and validate_name(name) and validate_email(email) and validate_phone_number(phone_number)
 
 
+def validate_agregar_pedido(ptype, products, description, region, comuna, name, email, phone_number):
+    return validate_type(ptype) and validate_product(products) and validate_description(description) and validate_region(region) and validate_comuna(comuna) and validate_name(name) and validate_email(email) and validate_phone_number(phone_number)
+
+
 def error_type(ptype):
     if validate_type(ptype):
         return ""
@@ -130,6 +134,11 @@ def error_phone(phone):
     return "Error en el número celular entregado. "
 
 
-def error_inputs(ptype, products, images, region, comuna, name, email, phone_number):
+def error_inputs_productos(ptype, products, images, region, comuna, name, email, phone_number):
     error = error_type(ptype) + error_products(products) + error_images(images) + error_region(region) + error_comuna(comuna) + error_name(name) + error_email(email) + error_phone(phone_number)
+    return error
+
+
+def error_inputs_pedidos(ptype, products, region, comuna, name, email, phone_number):
+    error = error_type(ptype) + error_products(products) + error_region(region) + error_comuna(comuna) + error_name(name) + error_email(email) + error_phone(phone_number)
     return error

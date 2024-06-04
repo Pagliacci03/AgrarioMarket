@@ -1,6 +1,6 @@
 from flask import Flask, request, render_template, redirect, url_for, jsonify
 from database import db
-from utils.validations import validate_agregar_producto, error_inputs
+from utils.validations import validate_agregar_producto, error_inputs_productos, validate_agregar_pedido, error_inputs_pedidos
 from werkzeug.utils import secure_filename
 from PIL import Image
 import hashlib
@@ -98,7 +98,7 @@ def agregarProducto():
                 # cada producto se asocia a un tipo de verdura o fruta
                 for product in products:
                     name_product_id = db.get_id_tvf_by_nombre(product)
-                    db.create_pvf(product_id, name_product_id)
+                    db.create_productovf(product_id, name_product_id)
 
                 # se suben las imagenes a una carpeta y base de datos en el servidor
                 for img in files:
@@ -125,7 +125,7 @@ def agregarProducto():
                 return redirect(url_for("index"))
             
             else:
-                error = error_inputs(product_type, products, files, region, comuna, productor_name, productor_email, phone_number)
+                error = error_inputs_productos(product_type, products, files, region, comuna, productor_name, productor_email, phone_number)
                 return render_template("agregar-producto.html", regiones=regiones, error=error)
         
         else: # se presiono el boton de regreso al indice
@@ -260,8 +260,44 @@ def informacionProducto(producto_id, width, height):
 
 @app.route("/agregar-pedido", methods=["GET", "POST"])
 def agregarPedido():
-    if request.method == "GET":
-        return render_template("agregar-pedido.html")
+    
+    regiones = []
+    for name in db.get_regiones():
+        regiones.append(name[0])
+
+    if request.method == "POST":
+        index = request.form.get("back_to_index")
+
+        if not index:
+            # datos del usuario registrados en el formulario
+            product_type = request.form.get("type")
+            products = request.form.getlist("product_checkbox")
+            description = request.form.get("description")
+            region = request.form.get("region")
+            comuna = request.form.get("comuna")
+            productor_name = request.form.get("name")
+            productor_email = request.form.get("email")
+            phone_number = request.form.get("phone")
+
+            if validate_agregar_pedido(product_type, products, description, region, comuna, productor_name, productor_email, phone_number):
+                comuna_id = db.get_id_comuna_by_nombre(comuna)
+                pedido_id = db.create_pedido(product_type, description, comuna_id, productor_name, productor_email, phone_number)
+
+                # cada producto se asocia a un tipo de verdura o fruta
+                for product in products:
+                    name_product_id = db.get_id_tvf_by_nombre(product)
+                    db.create_pedidovf(name_product_id, pedido_id)
+
+                return redirect(url_for("index"))
+            
+            else:
+                error = error_inputs_pedidos(product_type, products, region, comuna, productor_name, productor_email, phone_number)
+                return render_template("agregar-pedido.html", regiones=regiones, error=error)
+        
+        else: # se presiono el boton de regreso al indice
+            return redirect(url_for("index"))
+
+    return render_template("agregar-pedido.html", regiones=regiones)
 
 
 
