@@ -1,6 +1,7 @@
 Highcharts.chart('container', {
     chart: {
-        type: 'pie'
+        type: 'pie',
+        backgroundColor: 'lightgreen'
     },
     title: {
         text: 'Total de productos por tipo de fruta y verdura'
