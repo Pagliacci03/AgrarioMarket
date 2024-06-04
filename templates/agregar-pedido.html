@@ -6,12 +6,12 @@
         <link
         rel="stylesheet"
         type="text/css"
-        href="{{ url_for('static', filename='css/agregar-producto.css')}}"
+        href="{{ url_for('static', filename='css/agregar.css')}}"
         />
     </head>
     <body>
         <div class="container">
-            <form method="post" enctype="multipart/form-data" id="form_agregar_pedido">
+            <form method="post" id="form_agregar_pedido">
                 <table>
                     <tr>
                         <td colspan="2" id="back">
@@ -73,7 +73,7 @@
                         </td>
                         <td>
                             <select name="comuna" id="comunas" class="selection">
-                                <option value="" disabled selected>Seleccione la región del producto(s)</option>
+                                <option value="" disabled selected>Seleccione la región del pedido</option>
                             </select>
                         </td>
                     </tr>
@@ -103,11 +103,11 @@
                     </tr>
                     <tr class="botones">
                         <td colspan="2">
-                            <input type="button" id="add_order" class="button" value="Agregar Pedido">
+                            <input type="button" id="add" class="button" value="Agregar Pedido">
                         </td>
                     </tr>
                 </table>
-                <dialog id="modal_order" class="modal_order">
+                <dialog id="modal" class="modal">
                     <div class="modal_content">
                       <p>¿Confirma el registro de este pedido?</p>
                       <input type="submit" id="confirmar" class="modal_button" name="confirmar" value="Sí, confirmo">
@@ -118,6 +118,6 @@
         </div>
         <script src="{{ url_for('static', filename='js/selecciones.js') }}"></script>
         <script src="{{ url_for('static', filename='js/validaciones.js') }}"></script>
-        <script src="{{ url_for('static', filename='js/agregar-pedido.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/agregar.js') }}"></script>
     </body>
 </html>
