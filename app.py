@@ -203,7 +203,7 @@ def verProductos(pagina):
 
     elementos = len(db.get_all_productos())
     last = elementos // 5 if elementos % 5 != 0 else (elementos // 5) - 1
-    if (page != last): # no estamos en la ultima pagina
+    if (page != last and elementos != 0): # no estamos en la ultima pagina
         notlast = True
 
     if request.method == "POST":
@@ -398,7 +398,7 @@ def verPedidos(pagina):
 
     elementos = len(db.get_all_pedidos())
     last = elementos // 5 if elementos % 5 != 0 else (elementos // 5) - 1
-    if (page != last): # no estamos en la ultima pagina
+    if (page != last and elementos != 0): # no estamos en la ultima pagina
         notlast = True
 
     if request.method == "POST":
