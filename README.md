@@ -5,6 +5,8 @@ El siguiente proyecto es una solución de la tarea 3 del curso CC5002: Desarroll
 
 ### Uso
 
+**Es importante que se cree un ambiente virtual, se active y se instalen en este todo lo que aparece en requirements.txt**
+
 La primera página vista por el usuario es index.html, esta posee 5 botones que llevan a distintas páginas donde el usuario puede interactuar para agregar producto(s), ver los productos agregados, agregar un producto a comprar, es decir, un pedido, ver los pedidos agregados y las estadísticas de pedidos y productos. 
 
 La página de agregar-producto.html permite rellenar un formulario a los productores para agregar sus productos a la base de datos que se conecta la página. En esta página, los siguientes datos a rellenar son obligatorios y algunos deben cumplir con ciertas condiciones (validaciones del front-end):
