@@ -4,25 +4,29 @@ import re
 
 
 
+
+# --- Validaciones ---
+
+# Valida que n este en el rango de [i,j]
 def validate_amount(n, i, j):
     return n >= i and n <= j
 
-
+# Valida que un tipo de fruta o verdura
 def validate_type(ptype):
     return ptype == "fruta" or ptype == "verdura"
 
-
+# Valida que una lista de productos (nombres) estan en la base de datos
 def validate_product(products):
     for product in products:
         if not db.is_product(product):
             False
     return validate_amount(len(products), 1, 5)
 
-
+# Valida la description
 def validate_description(description):
     return True
 
-
+# Valida que la cantidad de imagenes es entre 1 a 3 y que sus extensiones son las permitidas
 def validate_img(images):
     ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "gif"}
     ALLOWED_MIMETYPES = {"image/jpeg", "image/png", "image/gif"}
@@ -41,26 +45,26 @@ def validate_img(images):
             return False
     return validate_amount(len(images), 1, 3)
 
-
+# Valida que la region escogida este en la base de datos
 def validate_region(region):
     if db.is_region(region):
         return True
     return False
 
-
+# Valida que la comuna este en la base de datos
 def validate_comuna(comuna):
     if db.is_comuna(comuna):
         return True
     return False
 
-
+# Valida que un nombre cuente entre 1 a 80 caracteres y solo este formado por letras
 def validate_name(name):
     new_name = name.replace(" ", "")
     if validate_amount(len(new_name), 1, 80):
         return bool(re.match('^[a-zA-Z]+$', new_name))
     return False
     
-
+# Valida que un correo tenga el formato correcto ((nombre)@dominio.dot) con dominio y dot pudiendo ser solo los permitidos por el servidor
 def validate_email(email):
     ALLOWED_DOMAINS = {"gmail", "outlook", "yahoo"}
     ALLOWED_DOTS = {"com", "cl"}
@@ -71,20 +75,26 @@ def validate_email(email):
             return True
     return False
 
-
+# Valida que el numero celular esta formado por 8 digitos 
 def validate_phone_number(phone_number):
     if phone_number:
         return phone_number.isdigit() and validate_amount(len(phone_number), 8, 8)
     return True
 
-
+# Valida que la instancia de un producto que quiere ser agregado a la base de datos cumpla con el formato y restricciones para cada uno de sus atributos
 def validate_agregar_producto(ptype, products, description, images, region, comuna, name, email, phone_number):
     return validate_type(ptype) and validate_product(products) and validate_description(description) and validate_img(images) and validate_region(region) and validate_comuna(comuna) and validate_name(name) and validate_email(email) and validate_phone_number(phone_number)
 
-
+# Valida que la instancia de un pedido que quiere ser agregado a la base de datos cumpla con el formato y restricciones para cada uno de sus atributos
 def validate_agregar_pedido(ptype, products, description, region, comuna, name, email, phone_number):
     return validate_type(ptype) and validate_product(products) and validate_description(description) and validate_region(region) and validate_comuna(comuna) and validate_name(name) and validate_email(email) and validate_phone_number(phone_number)
 
+
+
+
+
+# --- Mensajes de Errores ---
+# Retorna un mensaje de error solo si la validación es False
 
 def error_type(ptype):
     if validate_type(ptype):
