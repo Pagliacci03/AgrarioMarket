@@ -17,6 +17,8 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 
 # --- API's ---
+
+# Retorna los productos en formato json segun el tipo especificado en la url
 @app.route("/productos")
 def productos():
     tipo = request.args.get('tipo')
@@ -24,20 +26,58 @@ def productos():
 
     return jsonify(productos)
 
+
+# Retorna las comunas en formato json segun la region especificada en la url
 @app.route("/comunas")
 def comunas():
     region = request.args.get('region')
     comunas = db.get_comunas_by_region(region) 
 
-    # entregamos data necesaria al frontend para determinar las comunas según la región elegida
     return jsonify(comunas)
+
+
+# Retorna el total de productos por tipo de fruta y verdura en formato json
+@app.route("/get-stats-data-productos", methods=["GET"])
+@cross_origin(origin="localhost", supports_credentials=True)
+def get_stats_data_productos():
+
+    data = []
+    for producto in db.get_count_productos():
+        nombre, cantidad = producto
+        data.append({
+            "name": nombre,
+            "count": cantidad
+        })
+
+    return jsonify(data)
+
+
+# Retorna el total de pedidos por comuna en formato json
+@app.route("/get-stats-data-pedidos", methods=["GET"])
+@cross_origin(origin="localhost", supports_credentials=True)
+def get_stats_data_pedidos():
+
+    data = []
+    for comuna in db.get_count_pedidos():
+        nombre, cantidad = comuna
+        data.append({
+            "name": nombre,
+            "count": cantidad
+        })
+
+    return jsonify(data)
+
+
+
 
 
 # --- Indice ---
 
 @app.route("/", methods=["GET", "POST"])
 def index():
+    # No esta permitido acceder a la pagina success desde este punto
     session['allow_success'] = False
+
     if request.method == "GET":
         return render_template("index.html")
 
@@ -68,6 +108,7 @@ def index():
 
 @app.route("/agregar-producto", methods=["GET", "POST"])
 def agregarProducto():
+    # No esta permitido acceder a la pagina success desde este punto
     session['allow_success'] = False
 
     regiones = []
@@ -77,7 +118,7 @@ def agregarProducto():
     if request.method == "POST":
         index = request.form.get("back_to_index")
 
-        if not index:
+        if not index: # usuario hizo submit del formulario
             # datos del usuario registrados en el formulario
             product_type = request.form.get("type")
             products = request.form.getlist("product_checkbox")
@@ -89,13 +130,14 @@ def agregarProducto():
             productor_email = request.form.get("email")
             phone_number = request.form.get("phone")
 
-            # no tomar en cuenta al input de tipo file que se agrega después de agregar un archivo al input anterior
+            # no tomar en cuenta al input de tipo file que se agrega después de agregar un archivo al input anterior y esta vacío
             if len(files) >= 2 and len(files) <= 3 and not filetype.guess(files[-1]):
                 if not filetype.guess(files[-2]):
                     files = files[:-2]
                 else:
                     files = files[:-1] 
 
+            # validacion backend
             if validate_agregar_producto(product_type, products, description, files, region, comuna, productor_name, productor_email, phone_number):
                 comuna_id = db.get_id_comuna_by_nombre(comuna)
                 product_id = db.create_producto(product_type, description, comuna_id, productor_name, productor_email, phone_number)
@@ -105,7 +147,7 @@ def agregarProducto():
                     name_product_id = db.get_id_tvf_by_nombre(product)
                     db.create_productovf(product_id, name_product_id)
 
-                # se suben las imagenes a una carpeta y base de datos en el servidor
+                # se suben las imagenes a la carpeta uploads y a la base de datos en el servidor
                 for img in files:
                     # generación de un nombre aleatorio para el archivo
                     _filename = hashlib.sha256(
@@ -114,7 +156,7 @@ def agregarProducto():
                     _extension = filetype.guess(img).extension
                     img_filename = f"{_filename}_{str(uuid.uuid4())}.{_extension}"
 
-                    # guardar la imagen y sus distintas resoluciones en una carpeta
+                    # guardar la imagen y sus distintas resoluciones en uploads
                     img_path = os.path.join(app.config["UPLOAD_FOLDER"], img_filename)
                     img.save(img_path)
                     sizes = [(120, 120), (640, 480), (1280, 1024)]
@@ -127,10 +169,11 @@ def agregarProducto():
                     # guardar los datos del archivo en la base de datos
                     db.create_image(img_path, img_filename, product_id)
 
+                # las validaciones son correctas por lo que se permite el acceso a la pagina de success
                 session['allow_success'] = True
                 return redirect(url_for("success"))
             
-            else:
+            else: # validaciones erroneas
                 error = error_inputs_productos(product_type, products, files, region, comuna, productor_name, productor_email, phone_number)
                 return render_template("agregar-producto.html", regiones=regiones, error=error)
         
@@ -146,6 +189,7 @@ def agregarProducto():
 
 @app.route("/ver-productos/<pagina>", methods=["GET", "POST"])
 def verProductos(pagina):
+    # No esta permitido acceder a la pagina success desde este punto
     session['allow_success'] = False
 
     page = int(pagina)
@@ -154,12 +198,12 @@ def verProductos(pagina):
     notfirst = False
     notlast = False
 
-    if page != 0:
+    if page != 0: # no estamos en la primera pagina
         notfirst = True
 
     elementos = len(db.get_all_productos())
     last = elementos // 5 if elementos % 5 != 0 else (elementos // 5) - 1
-    if (page != last):
+    if (page != last): # no estamos en la ultima pagina
         notlast = True
 
     if request.method == "POST":
@@ -167,14 +211,14 @@ def verProductos(pagina):
         anterior = request.form.get("back")
         siguiente = request.form.get("next")
 
-        if index:
+        if index: # usuario quiere volver al indice
             return redirect(url_for("index"))
         
-        if anterior:
+        if anterior: # usuario retrocedio de pagina
             page -= 1
             return redirect(url_for("verProductos", pagina=page))
 
-        if siguiente:
+        if siguiente: # usuario avanzo de pagina
             page += 1
             return redirect(url_for("verProductos", pagina=page))
 
@@ -182,13 +226,21 @@ def verProductos(pagina):
         productos = []
         for product in db.get_producto(limit_left, show):
             product_id, tipo, _, comuna_id, _, _, _ = product
+
+            # nombres del o los productos
             names = ""
             product_names = [row[0] for row in db.get_name_by_id_product(product_id)]
             for name in product_names:
                 names += name + ", "
             names = names[:-2]
+
+            # region
             region = db.get_region_by_id_comuna(comuna_id)[0]
+            
+            # comuna
             comuna = db.get_comuna_by_id(comuna_id)[0]
+            
+            # fotos
             urls = []
             fotos = [row[0] for row in db.get_foto_by_id_product(product_id)]
             for foto in fotos:
@@ -215,52 +267,64 @@ def verProductos(pagina):
 
 @app.route("/informacion-producto/<producto_id>/<width>/<height>", methods=["GET", "POST"])
 def informacionProducto(producto_id, width, height):
+    # No esta permitido acceder a la pagina success desde este punto
     session['allow_success'] = False
+
     if request.method == "POST":
         index = request.form.get("index")
-        if index:
+        if index: # usuario desea volver al indice
             return redirect(url_for("index"))
         
-    _, product_type, description, comuna_id, productor, email, phone_number = db.get_producto_by_id(producto_id)[0]
-    names = ""
-    product_names = [row[0] for row in db.get_name_by_id_product(producto_id)]
-    for name in product_names:
-        names += name + ", "
-    names = names[:-2]
-    urls = []
-    fotos = [row[0] for row in db.get_foto_by_id_product(producto_id)]
-    for foto in fotos:
-        p_img = f"uploads/{foto}_size_{width}_{height}"
-        _extension = os.path.splitext(foto)[1].lower()
-        p_img += f"{_extension}"
-        urls.append(p_img)
-
-    comuna = db.get_comuna_by_id(comuna_id)[0]
-    region = db.get_region_by_id_comuna(comuna_id)[0]
-
-    if not description:
-        description = ""
-
-    if not phone_number:
-        phone_number = ""
-    
+    elif request.method == "GET":
+        _, product_type, description, comuna_id, productor, email, phone_number = db.get_producto_by_id(producto_id)[0]
         
-    info = {
-        "id": producto_id,
-        "tipo": product_type,
-        "productos": names,
-        "descripcion": description,
-        "fotos": urls,
-        "region": region,
-        "comuna": comuna,
-        "productor": productor,
-        "email": email,
-        "celular": phone_number,
-        "width": width,
-        "height": height
-    }
+        # nombres del o los productos
+        names = ""
+        product_names = [row[0] for row in db.get_name_by_id_product(producto_id)]
+        for name in product_names:
+            names += name + ", "
+        names = names[:-2]
 
-    return render_template("informacion-producto.html", info=info)
+        # fotos
+        urls = []
+        fotos = [row[0] for row in db.get_foto_by_id_product(producto_id)]
+        for foto in fotos:
+            p_img = f"uploads/{foto}_size_{width}_{height}"
+            _extension = os.path.splitext(foto)[1].lower()
+            p_img += f"{_extension}"
+            urls.append(p_img)
+
+        # comuna
+        comuna = db.get_comuna_by_id(comuna_id)[0]
+
+        # region
+        region = db.get_region_by_id_comuna(comuna_id)[0]
+
+        # descripcion
+        if not description:
+            description = ""
+
+        # numero celular
+        if not phone_number:
+            phone_number = ""
+        
+            
+        info = {
+            "id": producto_id,
+            "tipo": product_type,
+            "productos": names,
+            "descripcion": description,
+            "fotos": urls,
+            "region": region,
+            "comuna": comuna,
+            "productor": productor,
+            "email": email,
+            "celular": phone_number,
+            "width": width,
+            "height": height
+        }
+
+        return render_template("informacion-producto.html", info=info)
 
 
 
@@ -269,6 +333,7 @@ def informacionProducto(producto_id, width, height):
 
 @app.route("/agregar-pedido", methods=["GET", "POST"])
 def agregarPedido():
+    # No esta permitido acceder a la pagina success desde este punto
     session['allow_success'] = False
     
     regiones = []
@@ -278,7 +343,7 @@ def agregarPedido():
     if request.method == "POST":
         index = request.form.get("back_to_index")
 
-        if not index:
+        if not index: # usuario hizo submit del formulario
             # datos del usuario registrados en el formulario
             product_type = request.form.get("type")
             products = request.form.getlist("product_checkbox")
@@ -289,6 +354,7 @@ def agregarPedido():
             productor_email = request.form.get("email")
             phone_number = request.form.get("phone")
 
+            # validacion backend
             if validate_agregar_pedido(product_type, products, description, region, comuna, productor_name, productor_email, phone_number):
                 comuna_id = db.get_id_comuna_by_nombre(comuna)
                 pedido_id = db.create_pedido(product_type, description, comuna_id, productor_name, productor_email, phone_number)
@@ -298,10 +364,11 @@ def agregarPedido():
                     name_product_id = db.get_id_tvf_by_nombre(product)
                     db.create_pedidovf(name_product_id, pedido_id)
 
+                # las validaciones son correctas por lo que se permite el acceso a la pagina de success
                 session['allow_success'] = True
                 return redirect(url_for("success"))
             
-            else:
+            else: # error en la validacion
                 error = error_inputs_pedidos(product_type, products, region, comuna, productor_name, productor_email, phone_number)
                 return render_template("agregar-pedido.html", regiones=regiones, error=error)
         
@@ -317,6 +384,7 @@ def agregarPedido():
 
 @app.route("/ver-pedidos/<pagina>", methods=["GET", "POST"])
 def verPedidos(pagina):
+    # No esta permitido acceder a la pagina success desde este punto
     session['allow_success'] = False
 
     page = int(pagina)
@@ -325,12 +393,12 @@ def verPedidos(pagina):
     notfirst = False
     notlast = False
 
-    if page != 0:
+    if page != 0: # no estamos en la primera pagina
         notfirst = True
 
     elementos = len(db.get_all_pedidos())
     last = elementos // 5 if elementos % 5 != 0 else (elementos // 5) - 1
-    if (page != last):
+    if (page != last): # no estamos en la ultima pagina
         notlast = True
 
     if request.method == "POST":
@@ -338,14 +406,14 @@ def verPedidos(pagina):
         anterior = request.form.get("back")
         siguiente = request.form.get("next")
 
-        if index:
+        if index: # usuario quiere volver al indice
             return redirect(url_for("index"))
         
-        if anterior:
+        if anterior: # usuario retrocedio de pagina
             page -= 1
             return redirect(url_for("verPedidos", pagina=page))
 
-        if siguiente:
+        if siguiente: # usuario avanzo de pagina
             page += 1
             return redirect(url_for("verPedidos", pagina=page))
 
@@ -353,13 +421,21 @@ def verPedidos(pagina):
         pedidos = []
         for pedido in db.get_pedido(limit_left, show):
             pedido_id, tipo, _, comuna_id, _, _, _ = pedido
+
+            # nombre del o los prodcutos
             names = ""
             product_names = [row[0] for row in db.get_name_by_id_pedido(pedido_id)]
             for name in product_names:
                 names += name + ", "
             names = names[:-2]
+
+            # region
             region = db.get_region_by_id_comuna(comuna_id)[0]
+
+            # comuna
             comuna = db.get_comuna_by_id(comuna_id)[0]
+
+            # nombre del comprador
             comprador = db.get_comprador_by_id_pedido(pedido_id)[0]
 
             pedidos.append({
@@ -380,42 +456,52 @@ def verPedidos(pagina):
 
 @app.route("/informacion-pedido/<pedido_id>", methods=["GET", "POST"])
 def informacionPedido(pedido_id):
+    # No esta permitido acceder a la pagina success desde este punto
     session['allow_success'] = False
 
     if request.method == "POST":
         index = request.form.get("index")
-        if index:
+        if index: # usuario desea volver al indice
             return redirect(url_for("index"))
         
-    _, product_type, description, comuna_id, comprador, email, phone_number = db.get_pedido_by_id(pedido_id)
-    names = ""
-    product_names = [row[0] for row in db.get_name_by_id_pedido(pedido_id)]
-    for name in product_names:
-        names += name + ", "
-    names = names[:-2]
-    comuna = db.get_comuna_by_id(comuna_id)[0]
-    region = db.get_region_by_id_comuna(comuna_id)[0]
-
-    if not description:
-        description = ""
-
-    if not phone_number:
-        phone_number = ""
-    
+    elif request.method == "GET":
+        _, product_type, description, comuna_id, comprador, email, phone_number = db.get_pedido_by_id(pedido_id)
         
-    info = {
-        "id": pedido_id,
-        "tipo": product_type,
-        "productos": names,
-        "descripcion": description,
-        "region": region,
-        "comuna": comuna,
-        "comprador": comprador,
-        "email": email,
-        "celular": phone_number,
-    }
+        # nombre del o los productos
+        names = ""
+        product_names = [row[0] for row in db.get_name_by_id_pedido(pedido_id)]
+        for name in product_names:
+            names += name + ", "
+        names = names[:-2]
 
-    return render_template("informacion-pedido.html", info=info)
+        # comuna
+        comuna = db.get_comuna_by_id(comuna_id)[0]
+
+        # region
+        region = db.get_region_by_id_comuna(comuna_id)[0]
+
+        # descripcion
+        if not description:
+            description = ""
+
+        # numero celular
+        if not phone_number:
+            phone_number = ""
+        
+            
+        info = {
+            "id": pedido_id,
+            "tipo": product_type,
+            "productos": names,
+            "descripcion": description,
+            "region": region,
+            "comuna": comuna,
+            "comprador": comprador,
+            "email": email,
+            "celular": phone_number,
+        }
+
+        return render_template("informacion-pedido.html", info=info)
 
 
 
@@ -425,38 +511,9 @@ def informacionPedido(pedido_id):
 
 @app.route("/stats", methods=["GET"])
 def stats():
+    # No esta permitido acceder a la pagina success desde este punto
     session['allow_success'] = False
     return render_template("stats.html")
-
-
-@app.route("/get-stats-data-productos", methods=["GET"])
-@cross_origin(origin="localhost", supports_credentials=True)
-def get_stats_data_productos():
-
-    data = []
-    for producto in db.get_count_productos():
-        nombre, cantidad = producto
-        data.append({
-            "name": nombre,
-            "count": cantidad
-        })
-
-    return jsonify(data)
-
-
-@app.route("/get-stats-data-pedidos", methods=["GET"])
-@cross_origin(origin="localhost", supports_credentials=True)
-def get_stats_data_pedidos():
-
-    data = []
-    for comuna in db.get_count_pedidos():
-        nombre, cantidad = comuna
-        data.append({
-            "name": nombre,
-            "count": cantidad
-        })
-
-    return jsonify(data)
 
 
 
